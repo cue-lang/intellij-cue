@@ -105,6 +105,7 @@ changelog {
 idea {
     module {
         generatedSourceDirs.add(project.file("src/main/java-gen"))
+        isDownloadSources = true
     }
 }
 
