@@ -7,7 +7,6 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <depends optional="true" config-file="intellilang.xml">org.intellij.intelliLang</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.parserDefinition language="CUE" implementationClass="dev.monogon.cue.lang.CueParserDefinition"/>
@@ -34,6 +33,9 @@
         <lang.quoteHandler language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueQuoteHandler"/>
         <lineIndentProvider implementation="dev.monogon.cue.lang.editor.formatter.CueLineIndentProvider"/>
         <enterBetweenBracesDelegate language="CUE" implementationClass="dev.monogon.cue.lang.editor.formatter.CueEnterBetweenBracesHandler"/>
+
+        <languageInjectionPerformer language="CUE"
+                                    implementationClass="dev.monogon.cue.lang.injection.CueLanguageInjectionPerformer"/>
 
         <lang.foldingBuilder language="CUE" implementationClass="dev.monogon.cue.lang.editor.folding.CueFoldingBuilder"/>
         <lang.psiStructureViewFactory language="CUE" implementationClass="dev.monogon.cue.lang.navigation.CuePsiStructureViewFactory"/>
