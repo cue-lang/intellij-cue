@@ -27,11 +27,10 @@ public class CueMultiHostInjector implements MultiHostInjector {
 
     @Override
     public void getLanguagesToInject(@NotNull MultiHostRegistrar registrar, @NotNull PsiElement context) {
-        if (!(context instanceof CueStringLiteral)) {
+        if (!(context instanceof CueStringLiteral literal)) {
             return;
         }
 
-        var literal = (CueStringLiteral)context;
         if (!literal.isValidHost()) {
             return;
         }
