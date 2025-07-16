@@ -1,7 +1,7 @@
 package dev.monogon.cue.cli;
 
 import com.intellij.execution.ExecutionException;
-import com.intellij.openapi.components.ServiceManager;
+import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,8 +19,7 @@ public interface CueCommandService {
     @Nullable
     String format(@NotNull String content, long timeout, TimeUnit unit) throws ExecutionException;
 
-    @NotNull
-    static CueCommandService getInstance() {
-        return ServiceManager.getService(CueCommandService.class);
+    static @NotNull CueCommandService getInstance() {
+        return ApplicationManager.getApplication().getService(CueCommandService.class);
     }
 }
