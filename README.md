@@ -4,7 +4,7 @@
 
 ## Usage
 
-The CUE plugin is compatible with **any JetBrains IDE 2020.3** or later. 
+The CUE plugin is compatible with **any JetBrains IDE 2024.2** or later.
 Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
 
 ### Features
@@ -27,15 +27,17 @@ Please make sure that `cue` is available in `$PATH`. If the executable can't be 
 Only complete files can be supported. If content is selected before invoking the format action, then no content is modified.
 
 #### Settings
-The application settings allow to configure the path to the `cue` binary. You can download it at [github.com/cuelang](https://github.com/cuelang/cue/releases).
+
+The application settings allow to configure the path to the `cue` binary.
+You can download it at [github.com/cuelang](https://github.com/cuelang/cue/releases).
 
 ### Bug Reports & Feature Requests
 
-Please report your issues at [github.com/monogon-dev/intellij-cue](https://github.com/monogon-dev/intellij-cue).
+Please report your issues at [https://github.com/monogon/intellij-cue](https://github.com/monogon/intellij-cue).
 
 ## Development
 
-- Java JDK 11 is required
+- Java JDK 21 is required
 
 ### IDE
 
@@ -43,9 +45,9 @@ Development is best in IntelliJ IDEA.
 
 The following plugins are required for development:
 
-- [GrammarKit 2021.1.2](https://plugins.jetbrains.com/plugin/6606-grammar-kit)
 - Gradle
 - Kotlin, for Gradle build file support
+- [GrammarKit 2023.3](https://plugins.jetbrains.com/plugin/6606-grammar-kit)
 
 ### Building
 
