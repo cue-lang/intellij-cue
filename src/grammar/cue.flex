@@ -2,7 +2,7 @@ package dev.monogon.cue.lang.lexer;
 
 import com.intellij.lexer.FlexLexer;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.util.containers.IntStack;
+import it.unimi.dsi.fastutil.ints.IntArrayList;
 
 import static com.intellij.psi.TokenType.BAD_CHARACTER;
 import static com.intellij.psi.TokenType.WHITE_SPACE;
@@ -16,17 +16,17 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
     this((java.io.Reader)null);
   }
 
-  private final IntStack stateStack = new IntStack(100);
+  private final IntArrayList stateStack = new IntArrayList(100);
 
   // the number of # characters, which define the current escape character, e.g. 1 for \#<escaped>
   private int escapePrefixLength = 0;
   // the escape prefix lengths of previous states on the stack
   // nesting is possible because of interpolations
-  private final IntStack escapePrefixLengthStack = new IntStack(100);
+  private final IntArrayList escapePrefixLengthStack = new IntArrayList(100);
 
   private void pushState(int state) {
       int currentState = yystate();
-      if (currentState == YYINITIAL && !stateStack.empty()) {
+      if (currentState == YYINITIAL && !stateStack.isEmpty()) {
           throw new IllegalStateException("Can't push initial state into the not empty stack");
       }
       stateStack.push(currentState);
@@ -37,11 +37,11 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
   }
 
   private void popState() {
-    assert !stateStack.empty() : "States stack is empty";
-    yybegin(stateStack.pop());
+    assert !stateStack.isEmpty() : "States stack is empty";
+    yybegin(stateStack.popInt());
 
-    assert !escapePrefixLengthStack.empty() : "Escape prefix length stack is empty";
-    escapePrefixLength = escapePrefixLengthStack.pop();
+    assert !escapePrefixLengthStack.isEmpty() : "Escape prefix length stack is empty";
+    escapePrefixLength = escapePrefixLengthStack.popInt();
   }
 
   /** Called when an instance is reset, e.g. on incremental lexer restart */
