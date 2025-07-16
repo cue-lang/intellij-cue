@@ -26,17 +26,17 @@ public class CueMergingLexerTest extends LexerTestCase {
     }
 
     @Override
-    protected Lexer createLexer() {
+    protected @NotNull Lexer createLexer() {
         return new CueMergingLexer();
     }
 
     @Override
-    protected String getDirPath() {
+    protected @NotNull String getDirPath() {
         return rootPath().toString();
     }
 
     @Override
-    protected @NotNull String getPathToTestDataFile(String extension) {
+    protected @NotNull String getPathToTestDataFile(@NotNull String extension) {
         return Paths.get(getDirPath(), filePath.replace(".cue", extension)).toString();
     }
 

@@ -2,6 +2,7 @@ package dev.monogon.cue.lang.editor.folding;
 
 import com.intellij.testFramework.FileBasedTestCaseHelperEx;
 import dev.monogon.cue.CueParameterizedLightTest;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.Test;
 
@@ -15,12 +16,12 @@ public class CueFoldingBuilderTest extends CueParameterizedLightTest implements 
     }
 
     @Override
-    public String getRelativeBasePath() {
+    public @NotNull String getRelativeBasePath() {
         return "lang/cue/folding";
     }
 
     @Override
-    public @Nullable String getFileSuffix(String fileName) {
+    public @Nullable String getFileSuffix(@NotNull String fileName) {
         return null;
     }
 }
