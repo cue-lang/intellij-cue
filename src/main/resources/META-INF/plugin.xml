@@ -39,7 +39,6 @@
         <lang.psiStructureViewFactory language="CUE" implementationClass="dev.monogon.cue.lang.navigation.CuePsiStructureViewFactory"/>
 
         <codeFoldingOptionsProvider instance="dev.monogon.cue.lang.editor.folding.CueFoldingOptionsProvider"/>
-        <applicationService serviceImplementation="dev.monogon.cue.lang.editor.folding.CueFoldingSettingsService"/>
 
         <externalFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.ExternalCueFormatter"/>
         <postFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.CuePostFormatProcessor"/>
