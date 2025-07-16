@@ -46,6 +46,8 @@
         <applicationService serviceInterface="dev.monogon.cue.cli.CueCommandService"
                             serviceImplementation="dev.monogon.cue.cli.DefaultCueCommandService"/>
 
-        <applicationConfigurable groupId="language" instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
+        <applicationConfigurable groupId="language"
+                                 key="applicationSettings.displayName"
+                                 instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
     </extensions>
 </idea-plugin>
