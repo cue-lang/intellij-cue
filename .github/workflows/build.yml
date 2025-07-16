@@ -16,6 +16,7 @@ on:
         branches: [ main ]
     # Trigger the workflow on any pull request
     pull_request:
+    workflow_dispatch:
 
 concurrency:
     group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
@@ -38,7 +39,7 @@ jobs:
             -   name: Setup Java
                 uses: actions/setup-java@v4
                 with:
-                    distribution: jetbrains
+                    distribution: temurin
                     java-version: 21
 
             # Setup Gradle
@@ -95,7 +96,7 @@ jobs:
             -   name: Setup Java
                 uses: actions/setup-java@v4
                 with:
-                    distribution: jetbrains
+                    distribution: temurin
                     java-version: 21
 
             # Setup Gradle
@@ -137,7 +138,7 @@ jobs:
             -   name: Setup Java
                 uses: actions/setup-java@v4
                 with:
-                    distribution: jetbrains
+                    distribution: temurin
                     java-version: 21
 
             # Setup Gradle
