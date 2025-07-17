@@ -10,7 +10,7 @@ plugins { // Java support
     id("org.jetbrains.changelog") version "1.3.1"
 
     // gradle-grammarkit-plugin - read more: https://github.com/JetBrains/gradle-grammar-kit-plugin
-    id("org.jetbrains.grammarkit") version "2021.2.1"
+    id("org.jetbrains.grammarkit") version "2022.3.2.2"
 }
 
 // Import variables from gradle.properties file
