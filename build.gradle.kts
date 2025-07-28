@@ -5,9 +5,9 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 
 plugins {
     idea
-    id("java") // https://github.com/JetBrains/intellij-platform-gradle-plugin/
-    id("org.jetbrains.intellij.platform") version "2.6.0" // https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.changelog") version "2.2.1" // https://github.com/JetBrains/gradle-grammar-kit-plugin
+    id("java")
+    id("org.jetbrains.intellij.platform") version "2.7.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
+    id("org.jetbrains.changelog") version "2.3.0" // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.grammarkit") version "2022.3.2.2" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
 }
 
@@ -48,6 +48,7 @@ dependencies {
 
     // workaround for https://github.com/JetBrains/intellij-platform-gradle-plugin/issues/1663
     testImplementation("org.opentest4j:opentest4j:1.3.0")
+    testImplementation("junit:junit:4.13.2") // https://mvnrepository.com/artifact/junit/junit
 }
 
 intellijPlatform {
@@ -69,8 +70,7 @@ intellijPlatform {
     }
 
     pluginVerification {
-        ides {
-            // earliest supported major version
+        ides { // earliest supported major version
             select {
                 sinceBuild = "242"
                 untilBuild = "242.*"
