@@ -40,7 +40,7 @@ dependencies {
     intellijPlatform {
         pluginVerifier()
 
-        intellijIdeaCommunity(platformVersion)
+        intellijIdeaUltimate(platformVersion)
         testFramework(TestFrameworkType.Bundled)
 
         bundledPlugin("org.intellij.intelliLang")
@@ -49,6 +49,7 @@ dependencies {
     // workaround for https://github.com/JetBrains/intellij-platform-gradle-plugin/issues/1663
     testImplementation("org.opentest4j:opentest4j:1.3.0")
     testImplementation("junit:junit:4.13.2") // https://mvnrepository.com/artifact/junit/junit
+    implementation(kotlin("stdlib-jdk8"))
 }
 
 intellijPlatform {

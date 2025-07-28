@@ -7,6 +7,7 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.ultimate</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.parserDefinition language="CUE" implementationClass="dev.monogon.cue.lang.CueParserDefinition"/>
@@ -50,5 +51,8 @@
         <applicationConfigurable groupId="language"
                                  key="applicationSettings.displayName"
                                  instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
+
+        <!-- Temporary code to test CUE LSP with the JetBrains LSP implementation -->
+        <platform.lsp.serverSupportProvider implementation="dev.monogon.cue.lsp.CueServerSupportProvider"/>
     </extensions>
 </idea-plugin>
