@@ -15,6 +15,11 @@ val pluginVersion: String by project
 val platformVersion: String by project
 val pluginSinceBuild: String by project
 
+// Helper property to simplify checks, using a loop to avoid repetitive string checks
+val platformVersionBuild = (242..293).firstOrNull { build -> // check 2024.2 and 242. prefixes for build = 242
+    platformVersion.startsWith("$build.") || platformVersion.startsWith("${2000 + build / 10}.${build % 10}")
+} ?: throw GradleException("Unable to find platform build for $platformVersion")
+
 group = "dev.monogon.cuelang"
 version = pluginVersion
 
@@ -40,10 +45,15 @@ dependencies {
     intellijPlatform {
         pluginVerifier()
 
-        intellijIdeaCommunity(platformVersion)
+        intellijIdeaUltimate(platformVersion)
         testFramework(TestFrameworkType.Bundled)
 
         bundledPlugin("org.intellij.intelliLang")
+
+        // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
+        if (platformVersionBuild >= 243) {
+            bundledPlugin("com.intellij.modules.json")
+        }
     }
 
     // workaround for https://github.com/JetBrains/intellij-platform-gradle-plugin/issues/1663

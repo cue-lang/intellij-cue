@@ -7,6 +7,18 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
+    <!--
+    com.intellij.modules.lsp is a module added with 2025.2.1 to allow to use LSP without declaring a dependency on
+    paid IDEs via com.intellij.modules.ultimate.
+    LSP support will only be enabled with a unified product version 2025.2.1 or later.
+    The ultimate module requires a paid subscription, even in the unified product distributions.
+    See https://platform.jetbrains.com/t/2025-2-how-can-i-run-tests-in-plugin-which-depends-on-ultimate/2399/3.
+    -->
+    <depends optional="true" config-file="plugin-lsp.xml">com.intellij.modules.lsp</depends>
+
+    <extensionPoints>
+        <extensionPoint name="lspSupportStatus" dynamic="true" interface="dev.monogon.cue.settings.CueLspSupport"/>
+    </extensionPoints>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.parserDefinition language="CUE" implementationClass="dev.monogon.cue.lang.CueParserDefinition"/>
@@ -32,7 +44,8 @@
         <lang.braceMatcher language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueBraceMatcher"/>
         <lang.quoteHandler language="CUE" implementationClass="dev.monogon.cue.lang.editor.CueQuoteHandler"/>
         <lineIndentProvider implementation="dev.monogon.cue.lang.editor.formatter.CueLineIndentProvider"/>
-        <enterBetweenBracesDelegate language="CUE" implementationClass="dev.monogon.cue.lang.editor.formatter.CueEnterBetweenBracesHandler"/>
+        <enterBetweenBracesDelegate language="CUE"
+                                    implementationClass="dev.monogon.cue.lang.editor.formatter.CueEnterBetweenBracesHandler"/>
 
         <languageInjectionPerformer language="CUE"
                                     implementationClass="dev.monogon.cue.lang.injection.CueLanguageInjectionPerformer"/>
