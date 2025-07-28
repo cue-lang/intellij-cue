@@ -33,7 +33,7 @@ You can download it at [github.com/cuelang](https://github.com/cuelang/cue/relea
 
 ### Bug Reports & Feature Requests
 
-Please report your issues at [https://github.com/monogon/intellij-cue](https://github.com/monogon/intellij-cue).
+Please report your issues at [https://github.com/cue-lang/intellij-cue/issues](https://github.com/cue-lang/intellij-cue/issues).
 
 ## Development
 
@@ -98,5 +98,5 @@ editor.
 
 ## Copyright
 
-&copy; 2021 Nexantic GmbH / Monogon
-
+&copy; 2021-2025 Monogon SE
+&copy; 2025 CUE Labs
