@@ -12,6 +12,7 @@ public class CueSettingsForm {
     private JPanel mainPanel;
     private JTextField cuePathInput;
 
+    @SuppressWarnings("DialogTitleCapitalization")
     private void createUIComponents() {
         var cuePathBrowseField = new TextFieldWithBrowseButton();
         cuePathBrowseField.addBrowseFolderListener(Messages.get("applicationSettings.cuePath.dialogTitle"),

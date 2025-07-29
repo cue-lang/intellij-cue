@@ -7,7 +7,7 @@
     <!-- Product and plugin compatibility requirements -->
     <!-- https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <depends optional="true" config-file="intellilang.xml">org.intellij.intelliLang</depends>
+    <depends>com.intellij.modules.ultimate</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <lang.parserDefinition language="CUE" implementationClass="dev.monogon.cue.lang.CueParserDefinition"/>
@@ -35,18 +35,24 @@
         <lineIndentProvider implementation="dev.monogon.cue.lang.editor.formatter.CueLineIndentProvider"/>
         <enterBetweenBracesDelegate language="CUE" implementationClass="dev.monogon.cue.lang.editor.formatter.CueEnterBetweenBracesHandler"/>
 
+        <languageInjectionPerformer language="CUE"
+                                    implementationClass="dev.monogon.cue.lang.injection.CueLanguageInjectionPerformer"/>
+
         <lang.foldingBuilder language="CUE" implementationClass="dev.monogon.cue.lang.editor.folding.CueFoldingBuilder"/>
         <lang.psiStructureViewFactory language="CUE" implementationClass="dev.monogon.cue.lang.navigation.CuePsiStructureViewFactory"/>
 
         <codeFoldingOptionsProvider instance="dev.monogon.cue.lang.editor.folding.CueFoldingOptionsProvider"/>
-        <applicationService serviceImplementation="dev.monogon.cue.lang.editor.folding.CueFoldingSettingsService"/>
 
         <externalFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.ExternalCueFormatter"/>
         <postFormatProcessor implementation="dev.monogon.cue.lang.editor.formatter.CuePostFormatProcessor"/>
         <applicationService serviceInterface="dev.monogon.cue.cli.CueCommandService"
                             serviceImplementation="dev.monogon.cue.cli.DefaultCueCommandService"/>
 
-        <applicationConfigurable groupId="language" instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
-        <applicationService serviceImplementation="dev.monogon.cue.settings.CueLocalSettingsService"/>
+        <applicationConfigurable groupId="language"
+                                 key="applicationSettings.displayName"
+                                 instance="dev.monogon.cue.settings.CueApplicationConfigurable"/>
+
+        <!-- Temporary code to test CUE LSP with the JetBrains LSP implementation -->
+        <platform.lsp.serverSupportProvider implementation="dev.monogon.cue.lsp.CueServerSupportProvider"/>
     </extensions>
 </idea-plugin>

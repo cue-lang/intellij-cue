@@ -4,16 +4,12 @@ import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.ParsingTestCase;
 import dev.monogon.cue.CueTests;
 import dev.monogon.cue.lang.CueParserDefinition;
-import junit.framework.AssertionFailedError;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * Run on all files in src/test/data/lang/cue/parser.
@@ -29,7 +25,7 @@ public class CueParserTest extends ParsingTestCase {
     }
 
     @Test
-    public void parser() throws IOException {
+    public void parser() {
         doTest(true, !getTestName().toLowerCase().contains("error"));
     }
 

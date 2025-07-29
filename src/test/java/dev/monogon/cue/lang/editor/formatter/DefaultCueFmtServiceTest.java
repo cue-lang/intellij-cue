@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DefaultCueFmtServiceTest extends CueLightTest {
     @Test
-    public void cueFmt() throws InterruptedException, ExecutionException {
+    public void cueFmt() throws ExecutionException {
         Assume.assumeTrue(PathEnvironmentVariableUtil.findInPath("cue") != null);
 
         var newContent = new DefaultCueCommandService().format("{        a          :            b}", 5, TimeUnit.SECONDS);

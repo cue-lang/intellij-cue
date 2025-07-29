@@ -28,7 +28,7 @@ public class CueFoldingBuilder extends FoldingBuilderEx implements DumbAware {
 
         List<FoldingDescriptor> result = new SmartList<>();
         SyntaxTraverser.psiTraverser(root).forEach(e -> foldElement(e, result, settings));
-        return result.toArray(FoldingDescriptor.EMPTY);
+        return result.toArray(new FoldingDescriptor[0]);
     }
 
     private void foldElement(@NotNull PsiElement element, @NotNull List<FoldingDescriptor> result, @NotNull CueFoldingSettings settings) {

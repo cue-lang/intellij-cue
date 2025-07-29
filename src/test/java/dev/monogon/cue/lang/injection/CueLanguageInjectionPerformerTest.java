@@ -18,12 +18,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.function.Consumer;
 
-public class CueMultiHostInjectorTest extends CueLightTest {
+public class CueLanguageInjectionPerformerTest extends CueLightTest {
     @Test
     public void singleRange() {
         createCueFile("'cont<caret>ent'");
         var literal = findTypedElement(CueSimpleBytesLit.class);
-        var ranges = CueMultiHostInjector.findInjectionRanges(literal);
+        var ranges = CueLanguageInjectionPerformer.findInjectionRanges(literal);
         assertEquals(Collections.singletonList(new InjectionData(TextRange.create(1, 8), null, null)), ranges);
     }
 
@@ -31,7 +31,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
     public void interpolationMiddle() {
         createCueFile("'a\\(123)b'");
         var literal = findTypedElement(CueStringLiteral.class);
-        var ranges = CueMultiHostInjector.findInjectionRanges(literal);
+        var ranges = CueLanguageInjectionPerformer.findInjectionRanges(literal);
 
         var expected = Arrays.asList(
             new InjectionData(TextRange.create(1, 2), null, null),
@@ -43,7 +43,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
     public void interpolationFirst() {
         createCueFile("'\\(123)b'");
         var literal = findTypedElement(CueStringLiteral.class);
-        var ranges = CueMultiHostInjector.findInjectionRanges(literal);
+        var ranges = CueLanguageInjectionPerformer.findInjectionRanges(literal);
 
         var expected = Arrays.asList(
             new InjectionData(TextRange.create(1, 1), null, null),
@@ -55,7 +55,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
     public void interpolationEnd() {
         createCueFile("'a\\(123)'");
         var literal = findTypedElement(CueStringLiteral.class);
-        var ranges = CueMultiHostInjector.findInjectionRanges(literal);
+        var ranges = CueLanguageInjectionPerformer.findInjectionRanges(literal);
 
         var expected = Arrays.asList(
             new InjectionData(TextRange.create(1, 2), null, null),
@@ -67,7 +67,7 @@ public class CueMultiHostInjectorTest extends CueLightTest {
     public void interpolationMultiple() {
         createCueFile("'a\\(1)b\\(2)b\\(3)'");
         var literal = findTypedElement(CueStringLiteral.class);
-        var ranges = CueMultiHostInjector.findInjectionRanges(literal);
+        var ranges = CueLanguageInjectionPerformer.findInjectionRanges(literal);
 
         var expected = Arrays.asList(
             new InjectionData(TextRange.create(1, 2), null, null),

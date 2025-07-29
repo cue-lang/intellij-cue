@@ -7,10 +7,11 @@ import org.junit.Test;
 public class CueLabelExprImplTest extends CueLightTest {
     @Test
     public void constraintOptional() {
-        createCueFile("#Person: {\n" +
-                      "    <caret>name!: string\n" +
-                      "    age?:  int\n" +
-                      "}");
+        createCueFile("""
+                          #Person: {
+                              <caret>name!: string
+                              age?:  int
+                          }""");
 
         var field = findTypedElement(CueLabelExpr.class);
         assertTrue(field.isRequiredFieldConstraint());
@@ -19,10 +20,11 @@ public class CueLabelExprImplTest extends CueLightTest {
 
     @Test
     public void constraintRequired() {
-        createCueFile("#Person: {\n" +
-                      "    name!: string\n" +
-                      "    <caret>age?:  int\n" +
-                      "}");
+        createCueFile("""
+                          #Person: {
+                              name!: string
+                              <caret>age?:  int
+                          }""");
 
         var field = findTypedElement(CueLabelExpr.class);
         assertFalse(field.isRequiredFieldConstraint());
