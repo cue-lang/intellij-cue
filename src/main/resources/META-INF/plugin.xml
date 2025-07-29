@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>dev.monogon.cuelang</id>
     <name>CUE</name>
-    <vendor url="https://github.com/monogon-dev/intellij-cue/" email="intellij-publishers@monogon.dev">monogon</vendor>
+    <vendor url="https://cue.dev" email="contact@cue.dev">cue-labs</vendor>
     <resource-bundle>messages.cuelang</resource-bundle>
 
     <!-- Product and plugin compatibility requirements -->
