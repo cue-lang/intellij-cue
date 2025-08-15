@@ -6,7 +6,7 @@ import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 plugins {
     idea
     id("java")
-    id("org.jetbrains.intellij.platform") version "2.7.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
+    id("org.jetbrains.intellij.platform") version "2.7.2" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
     id("org.jetbrains.changelog") version "2.3.0" // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.grammarkit") version "2022.3.2.2" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
 }
