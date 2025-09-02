@@ -96,7 +96,16 @@ editor.
 - [CUE Language Website](https://cuelang.org/)
 - [The CUE Language Specification](https://cuelang.org/docs/references/spec/)
 
+## History
+
+This project started life at https://github.com/monogon/intellij-cue, where it
+was developed and maintained by Monogon SE. In 2025, Monogon SE graciously
+gifted this work to the [CUE open source project](https://cuelang.org),
+transferring the repository to its current home under the [CUE
+organization](https://github.com/cue-lang).
+
+
 ## Copyright
 
-&copy; 2021-2025 Monogon SE
+&copy; 2021-2025 Monogon SE<br>
 &copy; 2025 CUE Labs
