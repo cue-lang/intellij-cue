@@ -12,6 +12,7 @@ import java.util.Objects;
 public class CueLocalSettings {
     @Nullable
     private volatile String cueExecutablePath;
+    private boolean lspEnabled = true;
 
     @Nullable
     public String getCueExecutablePath() {
@@ -19,30 +20,31 @@ public class CueLocalSettings {
     }
 
     public void setCueExecutablePath(@Nullable String path) {
-        this.cueExecutablePath = path;
+        this.cueExecutablePath = StringUtil.nullize(path);
     }
 
-    @Override
-    public String toString() {
-        return "CueLocalSettings{" +
-               "cueExecutablePath='" + cueExecutablePath + '\'' +
-               '}';
+    public boolean isLspEnabled() {
+        return lspEnabled;
+    }
+
+    public void setLspEnabled(boolean lspEnabled) {
+        this.lspEnabled = lspEnabled;
+    }
+
+    public void applyFrom(@NotNull CueLocalSettings state) {
+        setCueExecutablePath(state.cueExecutablePath);
+        setLspEnabled(state.lspEnabled);
     }
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        CueLocalSettings settings = (CueLocalSettings)o;
-        return Objects.equals(cueExecutablePath, settings.cueExecutablePath);
+        CueLocalSettings that = (CueLocalSettings)o;
+        return lspEnabled == that.lspEnabled && Objects.equals(cueExecutablePath, that.cueExecutablePath);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(cueExecutablePath);
-    }
-
-    public void applyFrom(@NotNull CueLocalSettings state) {
-        this.cueExecutablePath = state.cueExecutablePath;
+        return Objects.hash(cueExecutablePath, lspEnabled);
     }
 }

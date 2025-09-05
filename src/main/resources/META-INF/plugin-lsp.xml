@@ -1,0 +1,15 @@
+<idea-plugin>
+    <projectListeners>
+        <listener topic="dev.monogon.cue.settings.CueSettingsListener"
+                  class="dev.monogon.cue.lsp.CueLspSettingListener"/>
+    </projectListeners>
+
+    <extensions defaultExtensionNs="dev.monogon.cuelang">
+        <lspSupportStatus implementation="dev.monogon.cue.lsp.CueJetBrainsLspSupport"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!--suppress PluginXmlValidity -->
+        <platform.lsp.serverSupportProvider implementation="dev.monogon.cue.lsp.CueServerSupportProvider"/>
+    </extensions>
+</idea-plugin>

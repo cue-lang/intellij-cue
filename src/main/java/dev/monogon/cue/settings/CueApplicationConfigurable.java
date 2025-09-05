@@ -1,17 +1,21 @@
 package dev.monogon.cue.settings;
 
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.options.Configurable;
-import com.intellij.openapi.options.ConfigurationException;
 import dev.monogon.cue.Messages;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-public class CueApplicationConfigurable implements Configurable {
+public final class CueApplicationConfigurable implements Configurable {
     private final CueSettingsForm form = new CueSettingsForm();
+    private final boolean initialLspEnabledState;
 
     public CueApplicationConfigurable() {
-        form.applyFrom(CueLocalSettingsService.getSettings());
+        var settings = CueLocalSettingsService.getSettings();
+        initialLspEnabledState = settings.isLspEnabled();
+
+        form.applyFrom(settings);
     }
 
     @Override
@@ -32,7 +36,15 @@ public class CueApplicationConfigurable implements Configurable {
     }
 
     @Override
-    public void apply() throws ConfigurationException {
+    public void apply() {
         form.applyTo(CueLocalSettingsService.getSettings());
+    }
+
+    @Override
+    public void disposeUIResources() {
+        var newEnableLspValue = CueLocalSettingsService.getSettings().isLspEnabled();
+        if (newEnableLspValue != initialLspEnabledState) {
+            ApplicationManager.getApplication().getMessageBus().syncPublisher(CueSettingsListener.TOPIC).lspStateChanged(newEnableLspValue);
+        }
     }
 }

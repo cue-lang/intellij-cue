@@ -5,12 +5,14 @@ import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.ui.components.JBTextField;
 import dev.monogon.cue.Messages;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
 
 public class CueSettingsForm {
     private JPanel mainPanel;
     private JTextField cuePathInput;
+    private JCheckBox enableLSP;
 
     @SuppressWarnings("DialogTitleCapitalization")
     private void createUIComponents() {
@@ -28,11 +30,15 @@ public class CueSettingsForm {
         return mainPanel;
     }
 
-    public void applyFrom(CueLocalSettings settings) {
+    public void applyFrom(@NotNull CueLocalSettings settings) {
         cuePathInput.setText(StringUtil.defaultIfEmpty(settings.getCueExecutablePath(), ""));
+        enableLSP.setSelected(settings.isLspEnabled());
+
+        enableLSP.setEnabled(CueLspSupport.isLspSupportAvailable());
     }
 
-    public void applyTo(CueLocalSettings settings) {
+    public void applyTo(@NotNull CueLocalSettings settings) {
         settings.setCueExecutablePath(cuePathInput.getText());
+        settings.setLspEnabled(enableLSP.isSelected());
     }
 }
