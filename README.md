@@ -4,8 +4,8 @@
 
 ## Usage
 
-The CUE plugin is compatible with **any JetBrains IDE 2024.2** or later.
-Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
+The CUE plugin is compatible with **any JetBrains IDE 2024.3** or later.
+Only IntelliJ-based IDEs are supported, which means that it's incompatible with ReSharper.
 
 ### Features
 
@@ -17,6 +17,8 @@ Only IntelliJ-based IDEs are supported, i.e. it's incompatible with ReSharper.
 - Brace matching
 - Formatting with `cue fmt`
 - Language injection
+- Basic LSP support if the installed version of `cue` supports it and if the used JetBrains IDEs supports it.
+  Paid JetBrains IDEs and IDEs with unified packaging include LSP support.
 
 #### Formatter
 
@@ -90,6 +92,10 @@ The parser is generated with JetBrains' GrammarKit. GrammarKit is a plugin for I
 To update the parser and all related classes, open the `cue.bnf` file in your IDE and choose `Generate Parser` in the context menu of the
 editor.
 
+## JetBrains IDE support policy
+
+As a general rule, we support at least the latest three major versions of JetBrains IDEs.
+
 ## Useful Link
 
 - [CUE on the JetBrains Marketplace](https://plugins.jetbrains.com/plugin/16126-cue)
@@ -103,7 +109,6 @@ was developed and maintained by Monogon SE. In 2025, Monogon SE graciously
 gifted this work to the [CUE open source project](https://cuelang.org),
 transferring the repository to its current home under the [CUE
 organization](https://github.com/cue-lang).
-
 
 ## Copyright
 
