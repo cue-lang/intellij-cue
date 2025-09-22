@@ -98,8 +98,8 @@ intellijPlatform {
     pluginVerification {
         ides { // earliest supported major version
             select {
-                sinceBuild = "242"
-                untilBuild = "242.*"
+                sinceBuild = "243"
+                untilBuild = "243.*"
                 types.set(listOf(IntelliJPlatformType.IntellijIdeaCommunity))
             }
 
