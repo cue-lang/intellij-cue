@@ -2,23 +2,26 @@ import org.jetbrains.changelog.Changelog
 import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     idea
     id("java")
+    kotlin("jvm")
     id("org.jetbrains.intellij.platform") version "2.9.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
     id("org.jetbrains.changelog") version "2.4.0" // https://github.com/JetBrains/gradle-changelog-plugin
     id("org.jetbrains.grammarkit") version "2022.3.2.2" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
 }
 
-val pluginVersion: String by project
-val platformVersion: String by project
-val pluginSinceBuild: String by project
+val platformVersion: Int = project.property("platformVersion")!!.toString().toInt() // load additional platform properties
+loadProperties(rootDir.resolve("gradle-${platformVersion}.properties").toString()).forEach {
+    rootProject.extra.set(it.key.toString(), it.value)
+}
 
-// Helper property to simplify checks, using a loop to avoid repetitive string checks
-val platformVersionBuild = (242..293).firstOrNull { build -> // check 2024.2 and 242. prefixes for build = 242
-    platformVersion.startsWith("$build.") || platformVersion.startsWith("${2000 + build / 10}.${build % 10}")
-} ?: throw GradleException("Unable to find platform build for $platformVersion")
+val pluginVersion: String by project
+val ideVersion: String by project
+val pluginSinceBuild: String by project
 
 group = "dev.monogon.cuelang"
 version = pluginVersion
@@ -37,6 +40,12 @@ java {
     }
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_21
+    }
+}
+
 sourceSets.main { // setup additional source folders
     java.srcDir("src/main/java-gen")
 }
@@ -45,13 +54,20 @@ dependencies {
     intellijPlatform {
         pluginVerifier()
 
-        intellijIdeaUltimate(platformVersion)
+        when {
+            platformVersion >= 253 -> intellijIdea(ideVersion) // 2025.3 only has unified product builds
+            else -> create(IntelliJPlatformType.IntellijIdeaUltimate, ideVersion)
+        }
         testFramework(TestFrameworkType.Bundled)
 
-        bundledPlugin("org.intellij.intelliLang")
+        // 2025.3 extracted the IntelliLang plugin into a module
+        when {
+            platformVersion >= 253 -> bundledModule("intellij.platform.langInjection")
+            else -> bundledPlugin("org.intellij.intelliLang")
+        }
 
         // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
-        if (platformVersionBuild >= 243) {
+        if (platformVersion >= 243) {
             bundledPlugin("com.intellij.modules.json")
         }
     }
@@ -89,9 +105,9 @@ intellijPlatform {
 
             // latest supported major version
             select {
-                sinceBuild = "252"
-                untilBuild = "252.*"
-                types.set(listOf(IntelliJPlatformType.IntellijIdeaCommunity))
+                sinceBuild = "253"
+                untilBuild = "253.*"
+                types.set(listOf(IntelliJPlatformType.IntellijIdea))
             }
         }
     }
