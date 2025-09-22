@@ -76,10 +76,10 @@ public class DefaultCueCommandService implements CueCommandService {
             .withParentEnvironmentType(GeneralCommandLine.ParentEnvironmentType.CONSOLE);
     }
 
-    private @Nullable Path findCueBinaryPath() {
+    @Override
+    public @Nullable Path findCueBinaryPath(@Nullable String configuredPath) {
         Path cueBinaryPath = null;
 
-        var configuredPath = CueLocalSettingsService.getSettings().getCueExecutablePath();
         if (StringUtil.isNotEmpty(configuredPath)) {
             cueBinaryPath = Paths.get(configuredPath);
         }
@@ -90,6 +90,10 @@ public class DefaultCueCommandService implements CueCommandService {
             }
         }
 
-        return cueBinaryPath != null && Files.isExecutable(cueBinaryPath) ? cueBinaryPath : null;
+        return cueBinaryPath != null && Files.isExecutable(cueBinaryPath) && !Files.isDirectory(cueBinaryPath) ? cueBinaryPath : null;
+    }
+
+    private @Nullable Path findCueBinaryPath() {
+        return findCueBinaryPath(CueLocalSettingsService.getSettings().getCueExecutablePath());
     }
 }
