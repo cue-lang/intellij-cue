@@ -120,12 +120,13 @@ intellijPlatform {
 }
 
 changelog {
-    version.set(pluginVersion)
-    path.set("${project.rootDir}/CHANGELOG.md")
-    header.set(provider { "[$version]}" })
-    itemPrefix.set("-")
-    keepUnreleasedSection.set(true)
-    unreleasedTerm.set("[Unreleased]")
+    version = pluginVersion
+    path = rootDir.resolve("CHANGELOG.md").canonicalPath
+    header = provider { pluginVersion }
+    itemPrefix = "-"
+    keepUnreleasedSection = true
+    unreleasedTerm = "[Unreleased]"
+    groups = listOf("Added", "Changed", "Fixed")
 }
 
 idea {
