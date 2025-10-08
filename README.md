@@ -92,6 +92,14 @@ The parser is generated with JetBrains' GrammarKit. GrammarKit is a plugin for I
 To update the parser and all related classes, open the `cue.bnf` file in your IDE and choose `Generate Parser` in the context menu of the
 editor.
 
+### Releasing
+
+Releases are handled by GitHub Actions.
+
+Each commit to the `main` branch creates a new draft release.
+Publishing a draft release on GitHub triggers a workflow to upload the plugin.
+The plugin is uploaded to the JetBrains Marketplace, and a new release is created on GitHub.
+
 ## JetBrains IDE support policy
 
 As a general rule, we support at least the latest three major versions of JetBrains IDEs.
