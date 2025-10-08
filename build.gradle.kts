@@ -91,7 +91,8 @@ intellijPlatform {
         }
 
         changeNotes = provider {
-            changelog.renderItem(changelog.get(pluginVersion).withHeader(false).withEmptySections(false), Changelog.OutputType.HTML)
+            val changelogItem = changelog.getOrNull(pluginVersion) ?: changelog.getUnreleased()
+            changelog.renderItem(changelogItem.withHeader(false).withEmptySections(false), Changelog.OutputType.HTML)
         }
     }
 
