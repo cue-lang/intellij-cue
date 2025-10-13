@@ -6,11 +6,15 @@
 
 ### Added
 
-- Experimental integration with CUE LSP, based on JetBrains' LSP support.
-
 ### Changed
 
 ### Fixed
+
+## 0.12.0
+
+### Added
+
+- Experimental integration with CUE LSP, based on JetBrains' LSP support.
 
 ## 0.11.0
 
