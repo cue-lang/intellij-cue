@@ -11,7 +11,7 @@ plugins {
     kotlin("jvm")
     id("org.jetbrains.intellij.platform") version "2.9.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
     id("org.jetbrains.changelog") version "2.4.0" // https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.grammarkit") version "2022.3.2.2" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
+    id("org.jetbrains.grammarkit") version "2023.3" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
 }
 
 val platformVersion: Int = project.property("platformVersion")!!.toString().toInt() // load additional platform properties
