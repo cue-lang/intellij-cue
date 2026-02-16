@@ -6,6 +6,16 @@
 
 ### Added
 
+- Show code completions provided by CUE LSP in `*.json` and `*.yaml` files.
+
+## 0.12.0
+
+### Changed
+
+### Fixed
+
+### Added
+
 - Experimental integration with CUE LSP, based on JetBrains' LSP support.
 
 ### Changed
