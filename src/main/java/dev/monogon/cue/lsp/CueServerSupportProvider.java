@@ -7,7 +7,6 @@ import com.intellij.platform.lsp.api.LspServerSupportProvider;
 import com.intellij.platform.lsp.api.lsWidget.LspServerWidgetItem;
 import dev.monogon.cue.Icons;
 import dev.monogon.cue.cli.CueCommandService;
-import dev.monogon.cue.lang.CueFileType;
 import dev.monogon.cue.settings.CueLocalSettingsService;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +17,9 @@ public class CueServerSupportProvider implements LspServerSupportProvider {
     public void fileOpened(@NotNull Project project,
                            @NotNull VirtualFile virtualFile,
                            @NotNull LspServerSupportProvider.LspServerStarter serverStarter) {
-        if (CueFileType.INSTANCE.equals(virtualFile.getFileType()) &&
+        // We're not invoking CueLanguageServerFiles.isSupportedByCue,
+        // because we don't want to launch CUE LSP for *.json or *.yaml.
+        if (CueLanguageServerFiles.isCueFile(virtualFile) &&
             CueLocalSettingsService.getSettings().isLspEnabled() &&
             CueCommandService.getInstance().isCueAvailable()) {
             serverStarter.ensureServerStarted(new CueServerDescriptor(project));
