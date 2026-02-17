@@ -10,7 +10,7 @@ import java.util.Set;
  * Shared handling of files supported by CUE.
  */
 public final class CueLanguageServerFiles {
-    private static final Set<String> SUPPORTED_COMPLETION_FILE_EXTENSIONS = Set.of("json", "yaml");
+    private static final Set<String> SUPPORTED_COMPLETION_FILE_EXTENSIONS = Set.of("json", "yml", "yaml");
 
     private CueLanguageServerFiles() {
     }

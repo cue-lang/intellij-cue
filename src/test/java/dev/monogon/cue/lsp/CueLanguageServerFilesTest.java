@@ -3,23 +3,22 @@ package dev.monogon.cue.lsp;
 import dev.monogon.cue.CueLightTest;
 import org.junit.Test;
 
+import java.util.Set;
+
 public class CueLanguageServerFilesTest extends CueLightTest {
     @Test
     public void cueSupportedFiles() {
         var cueFile = myFixture.createFile("file.cue", "");
-        var jsonFile = myFixture.createFile("file.json", "");
-        var yamlFile = myFixture.createFile("file.yaml", "");
-        var otherFile = myFixture.createFile("file.txt", "");
-
         assertTrue(CueLanguageServerFiles.isCueFile(cueFile));
         assertTrue(CueLanguageServerFiles.isSupportedByCue(cueFile));
 
-        assertFalse(CueLanguageServerFiles.isCueFile(jsonFile));
-        assertTrue(CueLanguageServerFiles.isSupportedByCue(jsonFile));
+        for (var ext : Set.of("json", "yml", "yaml")) {
+            var file = myFixture.createFile("file." + ext, "");
+            assertFalse(CueLanguageServerFiles.isCueFile(file));
+            assertTrue(CueLanguageServerFiles.isSupportedByCue(file));
+        }
 
-        assertFalse(CueLanguageServerFiles.isCueFile(yamlFile));
-        assertTrue(CueLanguageServerFiles.isSupportedByCue(yamlFile));
-
+        var otherFile = myFixture.createFile("file.txt", "");
         assertFalse(CueLanguageServerFiles.isCueFile(otherFile));
         assertFalse(CueLanguageServerFiles.isSupportedByCue(otherFile));
     }
