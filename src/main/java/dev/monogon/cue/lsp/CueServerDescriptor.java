@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
+@SuppressWarnings("UnstableApiUsage")
 class CueServerDescriptor extends ProjectWideLspServerDescriptor {
     public CueServerDescriptor(@NotNull Project project) {
         super(project, Messages.get("cue.lsp.descriptor.name"));
@@ -17,7 +18,7 @@ class CueServerDescriptor extends ProjectWideLspServerDescriptor {
 
     @Override
     public boolean isSupportedFile(@NotNull VirtualFile virtualFile) {
-        return CueLanguageServerFiles.isSupportedByCue(virtualFile);
+        return CueLanguageServerFiles.isSupportedByCue(getProject(), virtualFile);
     }
 
     @Override

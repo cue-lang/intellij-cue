@@ -17,9 +17,7 @@ public class CueServerSupportProvider implements LspServerSupportProvider {
     public void fileOpened(@NotNull Project project,
                            @NotNull VirtualFile virtualFile,
                            @NotNull LspServerSupportProvider.LspServerStarter serverStarter) {
-        // We're not invoking CueLanguageServerFiles.isSupportedByCue,
-        // because we don't want to launch CUE LSP for *.json or *.yaml.
-        if (CueLanguageServerFiles.isCueFile(virtualFile) &&
+        if (CueLanguageServerFiles.isSupportedByCue(project, virtualFile) &&
             CueLocalSettingsService.getSettings().isLspEnabled() &&
             CueCommandService.getInstance().isCueAvailable()) {
             serverStarter.ensureServerStarted(new CueServerDescriptor(project));

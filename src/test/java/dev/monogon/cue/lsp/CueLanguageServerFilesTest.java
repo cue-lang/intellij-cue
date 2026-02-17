@@ -10,16 +10,16 @@ public class CueLanguageServerFilesTest extends CueLightTest {
     public void cueSupportedFiles() {
         var cueFile = myFixture.createFile("file.cue", "");
         assertTrue(CueLanguageServerFiles.isCueFile(cueFile));
-        assertTrue(CueLanguageServerFiles.isSupportedByCue(cueFile));
+        assertTrue(CueLanguageServerFiles.isSupportedByCue(getProject(), cueFile));
 
         for (var ext : Set.of("json", "yml", "yaml")) {
             var file = myFixture.createFile("file." + ext, "");
             assertFalse(CueLanguageServerFiles.isCueFile(file));
-            assertTrue(CueLanguageServerFiles.isSupportedByCue(file));
+            assertTrue(CueLanguageServerFiles.isSupportedByCue(getProject(), file));
         }
 
         var otherFile = myFixture.createFile("file.txt", "");
         assertFalse(CueLanguageServerFiles.isCueFile(otherFile));
-        assertFalse(CueLanguageServerFiles.isSupportedByCue(otherFile));
+        assertFalse(CueLanguageServerFiles.isSupportedByCue(getProject(), otherFile));
     }
 }
