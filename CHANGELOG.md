@@ -4,6 +4,8 @@
 
 ## [Unreleased]
 
+## [0.13.0]
+
 ### Added
 
 - Show code completions provided by CUE LSP in `*.json` and `*.yaml` files.
