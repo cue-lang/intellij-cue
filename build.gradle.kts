@@ -58,6 +58,7 @@ dependencies {
             platformVersion >= 253 -> intellijIdea(ideVersion) // 2025.3 only has unified product builds
             else -> create(IntelliJPlatformType.IntellijIdeaUltimate, ideVersion)
         }
+        testFramework(TestFrameworkType.Platform)
         testFramework(TestFrameworkType.Bundled)
 
         // 2025.3 extracted the IntelliLang plugin into a module
