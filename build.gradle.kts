@@ -107,8 +107,8 @@ intellijPlatform {
 
             // latest supported major version
             select {
-                sinceBuild = "253"
-                untilBuild = "253.*"
+                sinceBuild = "261"
+                untilBuild = "261.*"
                 types.set(listOf(IntelliJPlatformType.IntellijIdea))
             }
         }
