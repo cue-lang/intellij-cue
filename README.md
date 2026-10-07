@@ -87,10 +87,21 @@ The following command regenerates the lexer:
 
 ### Parser
 
-The parser is generated with JetBrains' GrammarKit. GrammarKit is a plugin for IntelliJ IDEA. The definition is at `src/grammar/cue.bnf`.
+The parser is generated with JetBrains' GrammarKit. The definition is at `src/grammar/cue.bnf`.
 
-To update the parser and all related classes, open the `cue.bnf` file in your IDE and choose `Generate Parser` in the context menu of the
-editor.
+The following command regenerates the parser and the PSI classes:
+
+```bash
+./gradlew generateParser
+```
+
+`generateParser` compiles the plugin first, because GrammarKit reads the methods of `CuePsiImplUtil` from the compiled classes.
+Code that uses new tokens or PSI classes cannot compile until they are generated.
+So when a grammar change adds them, run `generateParser` first, then `generateLexer`, and only then change other code to use them.
+If `CuePsiImplUtil` changed, run `generateParser` again.
+Run `generateLexer` and `generateParser` as separate Gradle invocations.
+
+CI checks that the generated sources in `src/main/java-gen` are up to date.
 
 ### Releasing
 
