@@ -1,0 +1,12 @@
+FILE
+  PsiComment(LINE_COMMENT)('// versions: v0.8.0..; outcome: error 2:1: identifiers starting with '__' are reserved\n')
+  CueFieldImpl(FIELD)
+    CueLabelImpl(LABEL)
+      CueLabelExprImpl(LABEL_EXPR)
+        CueLabelNameImpl(LABEL_NAME)
+          PsiElement(IDENTIFIER)('__x')
+    PsiElement(:)(':')
+    PsiWhiteSpace(' ')
+    CueBasicLitImpl(BASIC_LIT)
+      PsiElement(INT_LIT)('1')
+  PsiElement(,)('')

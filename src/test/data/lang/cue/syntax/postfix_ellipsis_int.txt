@@ -1,0 +1,10 @@
+FILE
+  PsiComment(LINE_COMMENT)('// versions: v0.8.0..v0.17.0; outcome: error 3:5: postfix ... operator requires @experiment(explicitopen)\n')
+  PsiComment(LINE_COMMENT)('// versions: v0.18.0..; outcome: ok\n')
+  PsiElement(IDENTIFIER)('a')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:<expression> expected, got '1.'
+    PsiElement(FLOAT_LIT)('1.')
+  PsiElement(.)('.')
+  PsiElement(.)('.')
