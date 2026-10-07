@@ -144,4 +144,17 @@ tasks {
         targetOutputDir = project.file("src/main/java-gen/dev/monogon/cue/lang/lexer")
         purgeOldFiles = true
     }
+    generateParser {
+        sourceFile = project.file("src/grammar/cue.bnf")
+        targetRootOutputDir = project.file("src/main/java-gen")
+        pathToParser = "dev/monogon/cue/lang/parser/CueParser.java"
+        pathToPsiRoot = "dev/monogon/cue/lang/psi"
+        purgeOldFiles = true
+        // The generator finds the methods of psiImplUtilClass in the compiled
+        // classes; the committed generated sources make them compilable first.
+        dependsOn("compileJava", "compileKotlin")
+        doFirst {
+            classpath = classpath + files(sourceSets.main.get().output, configurations.compileClasspath)
+        }
+    }
 }

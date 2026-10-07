@@ -9,7 +9,7 @@ Please not the following important differences:
  */
 
 {
-    generate=[java="11"]
+    generate=[java="11" names="short"]
     consumeTokenMethod(".*")="consumeTokenFast"
 
     parserClass="dev.monogon.cue.lang.parser.CueParser"
