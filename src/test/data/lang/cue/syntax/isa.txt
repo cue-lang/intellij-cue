@@ -1,0 +1,10 @@
+FILE
+  PsiComment(LINE_COMMENT)('// versions: v0.8.0..; outcome: error 2:4: expected operand, found ':'\n')
+  PsiElement(IDENTIFIER)('a')
+  PsiWhiteSpace(' ')
+  PsiElement(:)(':')
+  PsiErrorElement:<expression> expected, got ':'
+    PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiElement(IDENTIFIER_PREDECLARED)('int')
+  PsiElement(,)('')

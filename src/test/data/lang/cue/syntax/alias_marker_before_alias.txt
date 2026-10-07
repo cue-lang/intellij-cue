@@ -1,0 +1,11 @@
+FILE
+  PsiComment(LINE_COMMENT)('// versions: v0.8.0..; outcome: error 2:3: missing ',' in struct literal\n')
+  PsiElement(IDENTIFIER)('a')
+  PsiElement(?)('?')
+  PsiErrorElement:':' expected, got '~'
+    PsiElement(BAD_CHARACTER)('~')
+  PsiElement(IDENTIFIER)('X')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiElement(IDENTIFIER_PREDECLARED)('int')
+  PsiElement(,)('')

@@ -157,4 +157,42 @@ tasks {
             classpath = classpath + files(sourceSets.main.get().output, configurations.compileClasspath)
         }
     }
+
+    // syncSyntaxCorpus refreshes the copy of the CUE syntax corpus that
+    // CueSyntaxCorpusTest reads, the .cue files in cue/parser/testdata/syntax,
+    // from a checkout of cue-lang/cue that is exactly at a tag, removes any
+    // directory, and records the tag in SOURCE:
+    //
+    //     ./gradlew syncSyntaxCorpus -PcueCheckout=<path>
+    register("syncSyntaxCorpus") {
+        group = "verification"
+        description = "Refreshes the CUE syntax corpus test data from a tagged cue-lang/cue checkout."
+        doLast {
+            val checkout = file(
+                providers.gradleProperty("cueCheckout").orNull
+                    ?: throw GradleException("set -PcueCheckout to a cue-lang/cue checkout at a tag")
+            )
+            val git = ProcessBuilder("git", "-C", checkout.path, "describe", "--exact-match", "--tags")
+                .redirectErrorStream(true)
+                .start()
+            val tag = git.inputStream.bufferedReader().readText().trim()
+            if (git.waitFor() != 0) {
+                throw GradleException("$checkout is not a git checkout exactly at a tag")
+            }
+            val source = checkout.resolve("cue/parser/testdata/syntax")
+            val target = file("src/test/data/lang/cue/syntax")
+            val names = source.listFiles { f -> f.name.endsWith(".cue") }?.map { it.name }?.toSet().orEmpty()
+            if (names.isEmpty()) {
+                throw GradleException("no corpus files in $source")
+            }
+            target.listFiles { f -> f.name.endsWith(".cue") && f.name !in names }?.forEach {
+                it.delete()
+                target.resolve(it.name.removeSuffix(".cue") + ".txt").delete()
+            }
+            target.listFiles { f -> f.isDirectory }?.forEach { it.deleteRecursively() }
+            names.forEach { source.resolve(it).copyTo(target.resolve(it), overwrite = true) }
+            target.resolve("SOURCE").writeText("cue-lang/cue $tag\n")
+            println("copied ${names.size} corpus files from cue-lang/cue $tag")
+        }
+    }
 }

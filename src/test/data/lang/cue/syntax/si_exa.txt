@@ -1,0 +1,9 @@
+FILE
+  PsiComment(LINE_COMMENT)('// versions: v0.8.0..; outcome: error 2:6: illegal exponent in number\n')
+  PsiElement(IDENTIFIER)('a')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:<expression> expected, got '1'
+    PsiElement(INT_LIT)('1')
+  PsiElement(IDENTIFIER)('Ei')
+  PsiElement(,)('')
