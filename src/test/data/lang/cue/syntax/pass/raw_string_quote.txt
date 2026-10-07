@@ -1,0 +1,29 @@
+FILE
+  CueFieldImpl(FIELD)
+    CueLabelImpl(LABEL)
+      CueLabelExprImpl(LABEL_EXPR)
+        CueLabelNameImpl(LABEL_NAME)
+          PsiElement(IDENTIFIER)('a')
+    PsiElement(:)(':')
+    PsiWhiteSpace(' ')
+    CueMultilineStringLitImpl(MULTILINE_STRING_LIT)
+      PsiElement(MULTILINE_STRING_START)('#"""')
+      PsiErrorElement:'\n' expected, got '#'
+        <empty list>
+      PsiElement(UNICODE_VALUE)('#')
+      PsiElement(\n)('\n')
+      PsiElement(UNICODE_VALUE)('b: #')
+      PsiElement(""")('"""#')
+  PsiElement(,)('')
+  PsiWhiteSpace('\n')
+  PsiElement(IDENTIFIER)('c')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiElement(MULTILINE_STRING_START)('##"""')
+  PsiElement(UNICODE_VALUE)('##')
+  PsiElement(\n)('\n')
+  PsiElement(UNICODE_VALUE)('d: #'''#')
+  PsiElement(\n)('\n')
+  PsiElement(UNICODE_VALUE)('e: 1')
+  PsiErrorElement:'"""' expected
+    <empty list>

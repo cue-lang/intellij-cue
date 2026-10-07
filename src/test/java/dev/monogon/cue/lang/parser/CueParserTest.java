@@ -1,9 +1,12 @@
 package dev.monogon.cue.lang.parser;
 
+import com.intellij.lang.LanguageBraceMatching;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.testFramework.ParsingTestCase;
 import dev.monogon.cue.CueTests;
+import dev.monogon.cue.lang.CueLanguage;
 import dev.monogon.cue.lang.CueParserDefinition;
+import dev.monogon.cue.lang.editor.CueBraceMatcher;
 import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,6 +25,14 @@ public class CueParserTest extends ParsingTestCase {
     public CueParserTest(@NotNull String filePath) {
         super("", "cue", true, new CueParserDefinition());
         this.filePath = filePath;
+    }
+
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        // Error recovery groups tokens by matching braces when the language has a brace matcher.
+        // Register it here, as the IDE does, so that the result does not depend on the tests run before.
+        addExplicitExtension(LanguageBraceMatching.INSTANCE, CueLanguage.INSTANCE, new CueBraceMatcher());
     }
 
     @Test

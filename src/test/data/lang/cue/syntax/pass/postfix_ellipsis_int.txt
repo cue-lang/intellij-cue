@@ -1,0 +1,8 @@
+FILE
+  PsiElement(IDENTIFIER)('a')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:<expression> expected, got '1.'
+    PsiElement(FLOAT_LIT)('1.')
+  PsiElement(.)('.')
+  PsiElement(.)('.')

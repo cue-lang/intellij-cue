@@ -1,0 +1,9 @@
+FILE
+  PsiComment(LINE_COMMENT)('// error: 2:4: illegal integer number\n')
+  PsiElement(IDENTIFIER)('a')
+  PsiElement(:)(':')
+  PsiWhiteSpace(' ')
+  PsiErrorElement:<expression> expected, got '0'
+    PsiElement(INT_LIT)('0')
+  PsiElement(INT_LIT)('755')
+  PsiElement(,)('')
