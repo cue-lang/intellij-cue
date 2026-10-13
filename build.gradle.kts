@@ -139,6 +139,13 @@ idea {
 }
 
 tasks {
+    // The tests read their data from src/test/data at run time. Declare it as
+    // an input, so that changing the data runs the tests again rather than
+    // reusing results from the build cache.
+    test {
+        inputs.dir("src/test/data").withPathSensitivity(PathSensitivity.RELATIVE)
+    }
+
     generateLexer {
         sourceFile = project.file("src/grammar/cue.flex")
         targetOutputDir = project.file("src/main/java-gen/dev/monogon/cue/lang/lexer")
