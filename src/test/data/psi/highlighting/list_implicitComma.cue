@@ -1,10 +1,10 @@
-// implicit commas are not allowed in list literals
+// newlines separate list elements, as commas do
 <info descr="null">a</info>: [
-    "value"<EOLError descr="Missing ',' before newline in list literal"></EOLError>
+    "value"
     ...
 ]
 
 <info descr="null">a</info>: [
-    "a"<EOLError descr="Missing ',' before newline in list literal"></EOLError>
+    "a"
     "b"
 ]
