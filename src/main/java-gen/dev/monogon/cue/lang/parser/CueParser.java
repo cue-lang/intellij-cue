@@ -1411,29 +1411,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   //                    | multiline_string_lit
   //                    | simple_bytes_lit
   //                    | multiline_bytes_lit
-  //                    | "#" string_lit "#"
   static boolean string_lit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "string_lit")) return false;
     boolean r;
-    Marker m = enter_section_(b);
     r = simple_string_lit(b, l + 1);
     if (!r) r = multiline_string_lit(b, l + 1);
     if (!r) r = simple_bytes_lit(b, l + 1);
     if (!r) r = multiline_bytes_lit(b, l + 1);
-    if (!r) r = string_lit_4(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // "#" string_lit "#"
-  private static boolean string_lit_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "string_lit_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenFast(b, "#");
-    r = r && string_lit(b, l + 1);
-    r = r && consumeToken(b, "#");
-    exit_section_(b, m, null, r);
     return r;
   }
 

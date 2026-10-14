@@ -1,13 +1,13 @@
 FILE
   PsiElement(IDENTIFIER)('a')
   PsiErrorElement:':' or '=' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(DUMMY_BLOCK)
     PsiElement(IDENTIFIER)('X')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')
     PsiElement(IDENTIFIER)('b')
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
     PsiElement(IDENTIFIER)('Y')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')

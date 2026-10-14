@@ -37,6 +37,7 @@ FILE
   PsiWhiteSpace(' ')
   PsiElement(IDENTIFIER)('a')
   PsiElement(?)('?')
+  PsiElement(,)('')
   PsiWhiteSpace('\n')
   PsiWhiteSpace('\t')
   PsiElement(})('}')

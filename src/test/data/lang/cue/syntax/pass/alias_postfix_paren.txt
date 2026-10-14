@@ -1,7 +1,7 @@
 FILE
   PsiElement(IDENTIFIER)('a')
   PsiErrorElement:':' or '=' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(DUMMY_BLOCK)
     PsiElement(()('(')
     PsiElement(IDENTIFIER)('X')

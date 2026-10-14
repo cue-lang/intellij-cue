@@ -215,6 +215,11 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     "]"     { return RIGHT_BRACKET; }
     "("     { pushState(PARENTHESIS); return LEFT_PAREN; }
     ")"     { return RIGHT_PAREN; }
+    "~"     { return TILDE; }
+    "->"    { return ARROW; }
+    // "#" directly before "[" or "{" opens a closed list or struct
+    "#" / [\[\{]
+            { return HASH; }
 
     "!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
             { return REL_OP; }
@@ -242,7 +247,14 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
    | "div"
    | "mod"
    | "quo"
-   | "rem"  { return IDENTIFIER_PREDECLARED; }
+   | "rem"
+   | "matchN"
+   | "matchIf"
+   | "error"
+   | "validator"  { return IDENTIFIER_PREDECLARED; }
+
+    // the enclosing struct
+    "self"  { return IDENTIFIER_PREDECLARED; }
 
     // types
     // null is also a null_lit

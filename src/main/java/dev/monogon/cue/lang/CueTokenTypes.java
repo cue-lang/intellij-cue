@@ -58,7 +58,9 @@ public interface CueTokenTypes {
         CueTypes.OP_UNIFICATION,
         CueTypes.OP_AND,
         CueTypes.OP_OR,
-        CueTypes.OP_EQ
+        CueTypes.OP_EQ,
+        CueTypes.TILDE,
+        CueTypes.ARROW
     );
 
     TokenSet IDENTIFIERS = TokenSet.create(

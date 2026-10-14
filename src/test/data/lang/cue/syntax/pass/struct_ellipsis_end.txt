@@ -25,6 +25,7 @@ FILE
       CueDeclarationImpl(DECLARATION)
         CueEllipsisImpl(ELLIPSIS)
           PsiElement(...)('...')
+      PsiElement(,)('')
       PsiWhiteSpace('\n')
       PsiElement(})('}')
   PsiElement(,)('')

@@ -18,7 +18,7 @@ FILE
   PsiElement(INTERPOLATION_END)(')')
   PsiElement(")('"')
   PsiErrorElement:':' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(IDENTIFIER)('X')
   PsiElement(:)(':')
   PsiWhiteSpace(' ')

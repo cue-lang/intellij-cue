@@ -3,7 +3,7 @@ FILE
   PsiElement(IDENTIFIER_PREDECLARED)('string')
   PsiElement(])(']')
   PsiErrorElement:':' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(DUMMY_BLOCK)
     PsiElement(()('(')
     PsiElement(IDENTIFIER)('K')

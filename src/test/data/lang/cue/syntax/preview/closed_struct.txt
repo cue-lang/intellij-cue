@@ -12,7 +12,7 @@ FILE
   PsiElement(:)(':')
   PsiWhiteSpace(' ')
   PsiErrorElement:<expression> expected, got '#'
-    PsiElement(BAD_CHARACTER)('#')
+    PsiElement(#)('#')
   PsiElement(DUMMY_BLOCK)
     PsiElement({)('{')
     PsiElement(DUMMY_BLOCK)

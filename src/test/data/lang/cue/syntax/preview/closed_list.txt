@@ -12,7 +12,7 @@ FILE
   PsiElement(:)(':')
   PsiWhiteSpace(' ')
   PsiErrorElement:<expression> expected, got '#'
-    PsiElement(BAD_CHARACTER)('#')
+    PsiElement(#)('#')
   PsiElement(DUMMY_BLOCK)
     PsiElement([)('[')
     PsiElement(INT_LIT)('1')
@@ -25,7 +25,7 @@ FILE
     PsiElement(IDENTIFIER)('b')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')
-    PsiElement(BAD_CHARACTER)('#')
+    PsiElement(#)('#')
     PsiElement([)('[')
   PsiElement(])(']')
   PsiElement(,)('')

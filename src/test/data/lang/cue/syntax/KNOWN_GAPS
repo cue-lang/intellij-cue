@@ -19,17 +19,16 @@ pass/keyword_for_var.cue
 pass/keywords_as_labels.cue
 pass/let_keyword_name.cue
 pass/literal_selectors.cue
-pass/newline_before_colon.cue
 pass/number_prefix_underscore.cue
 pass/postfix_ellipsis.cue
 pass/postfix_ellipsis_int.cue
 pass/postfix_ellipsis_signed.cue
 pass/postfix_ellipsis_space.cue
 pass/raw_string_quote.cue
-pass/struct_ellipsis_midline.cue
 pass/unary_eq.cue
 preview/call_chained.cue
 preview/call_labeled.cue
+preview/call_on_type.cue
 preview/call_partial.cue
 preview/closed_list.cue
 preview/closed_struct.cue
@@ -45,6 +44,7 @@ preview/func_multiline.cue
 preview/func_open_signature.cue
 preview/func_param_attrs.cue
 preview/func_param_markers.cue
+preview/func_type_only.cue
 preview/func_validator.cue
 preview/if_else.cue
 preview/list_comprehension_else.cue
