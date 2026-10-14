@@ -459,13 +459,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<kw "for">> identifier [ comma identifier ] "in" Expression
+  // <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref>> ] "in" Expression
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_CLAUSE, "<for clause>");
     r = kw(b, l + 1, "for");
-    r = r && identifier(b, l + 1);
+    r = r && identifier_ref(b, l + 1);
     r = r && ForClause_2(b, l + 1);
     r = r && consumeToken(b, "in");
     r = r && Expression(b, l + 1, -1);
@@ -473,20 +473,20 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ comma identifier ]
+  // [ comma <<identifier_ref>> ]
   private static boolean ForClause_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_2")) return false;
     ForClause_2_0(b, l + 1);
     return true;
   }
 
-  // comma identifier
+  // comma <<identifier_ref>>
   private static boolean ForClause_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = comma(b, l + 1);
-    r = r && identifier(b, l + 1);
+    r = r && identifier_ref(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

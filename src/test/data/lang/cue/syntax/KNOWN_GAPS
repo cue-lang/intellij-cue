@@ -1,7 +1,6 @@
 # Corpus files that must be valid but that the parser does not yet handle.
 # CueSyntaxCorpusTest fails if a listed file parses without errors.
 pass/comprehension_body_next_line.cue
-pass/keyword_for_var.cue
 pass/let_keyword_name.cue
 pass/literal_selectors.cue
 pass/number_prefix_underscore.cue

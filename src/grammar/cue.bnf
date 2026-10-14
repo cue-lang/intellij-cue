@@ -264,8 +264,8 @@ Comprehension       ::= Clauses StructLit [ FallbackClause ]
 Clauses             ::= StartClause { [ comma ] Clause }*
 StartClause         ::= ForClause | GuardClause | TryClause
 Clause              ::= StartClause | LetClause
-// fixme unclear if keywords are allowed here (i.e. remapped keywords)
-ForClause           ::= <<kw "for">> identifier [ comma identifier ] "in" Expression {
+// keywords may name the variables, as in for import in x
+ForClause           ::= <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref>> ] "in" Expression {
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]
 }
