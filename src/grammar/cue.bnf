@@ -259,9 +259,12 @@ private unary_op   ::= ADD_OP | EXCL | "*" | OP_EQ | rel_op
 
 
 // https://cuelang.org/docs/references/spec/#comprehensions
-Comprehension       ::= Clauses StructLit [ FallbackClause ]
+// a comma may follow each clause, so the struct may start on the next line
+Comprehension       ::= Clauses [ comma ] StructLit [ FallbackClause ]
 
-Clauses             ::= StartClause { [ comma ] Clause }*
+// a first try clause followed by a comma, as at the end of a line, is a
+// reference, as in CUE; a later try clause may end its line
+Clauses             ::= !(<<kw "try">> comma) StartClause { [ comma ] Clause }*
 StartClause         ::= ForClause | GuardClause | TryClause
 Clause              ::= StartClause | LetClause
 // keywords may name the variables, as in for import in x
