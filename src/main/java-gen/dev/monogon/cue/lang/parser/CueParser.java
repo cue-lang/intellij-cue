@@ -1385,7 +1385,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // "." (<<identifier_ref>> | simple_string_lit)
+  // "." (<<struct_label>> | simple_string_lit)
   public static boolean Selector(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Selector")) return false;
     if (!nextTokenIsFast(b, DOT)) return false;
@@ -1397,12 +1397,12 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // <<identifier_ref>> | simple_string_lit
+  // <<struct_label>> | simple_string_lit
   private static boolean Selector_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Selector_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = identifier_ref(b, l + 1);
+    r = struct_label(b, l + 1);
     if (!r) r = simple_string_lit(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
