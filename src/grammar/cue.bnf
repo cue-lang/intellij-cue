@@ -9,7 +9,7 @@ Please not the following important differences:
  */
 
 {
-    generate=[java="11"]
+    generate=[java="11" names="short"]
     consumeTokenMethod(".*")="consumeTokenFast"
 
     parserClass="dev.monogon.cue.lang.parser.CueParser"
@@ -81,13 +81,17 @@ Please not the following important differences:
         AT="@"
         LEFT_PAREN="("
         RIGHT_PAREN=")"
+        TILDE="~"
+        ARROW="->"
+        HASH="#"
 
         ATTRIBUTE_VALUE="ATTRIBUTE_VALUE"
     ]
 }
 
 // https://cuelang.org/docs/references/spec/#source-file-organization
-private file ::= { attribute comma }* [ PackageClause comma ]  { ImportDecl comma }* { Declaration comma }*
+// IntelliJ: attributes before the package clause are read by the first loop
+private file ::= { attribute comma }* [ PackageClause comma ] [ { attribute comma }* ImportDecl comma ] { ImportDecl comma }* { Declaration comma }*
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
@@ -128,13 +132,12 @@ multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpol
     methods=[openingQuote="MULTILINE_BYTES_START" closingQuote="MULTILINE_BYTES_END"]
 }
 
-interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }
+interpolation ::= INTERPOLATION_START Expression [ comma ] INTERPOLATION_END { pin=1 }
 
 private string_lit ::= simple_string_lit
                    | multiline_string_lit
                    | simple_bytes_lit
                    | multiline_bytes_lit
-                   | "#" string_lit "#"
 //private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
 
 // IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
@@ -144,8 +147,9 @@ methods = [getReferences]
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
-    pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
+// IntelliJ: a "#" directly before "{" makes the struct closed
+StructLit       ::= [ HASH ] "{" [ Declaration {comma Declaration}* comma? ] "}" {
+    pin=2 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
 }
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
@@ -153,8 +157,9 @@ Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods=[getPresentation]}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
-LabelExpr       ::= LabelName ["?" | "!"]
-                  | "[" AliasExpr "]" {
+// IntelliJ: the postfix alias comes before "?" or "!", as CUE's parser requires
+LabelExpr       ::= LabelName [ PostfixAlias ] ["?" | "!"]
+                  | "[" AliasExpr "]" [ PostfixAlias ] {
     methods=[isOptionalFieldConstraint isRequiredFieldConstraint]
 }
 LabelName       ::= <<struct_label>>
@@ -162,6 +167,9 @@ LabelName       ::= <<struct_label>>
                   | "(" AliasExpr ")" {
     methods=[isOptionalFieldName isRequiredFieldName isDynamicFieldName]
 }
+
+// https://cuelang.org/docs/references/spec/#aliases
+PostfixAlias    ::= "~" ( <<identifier_ref>> | "(" <<identifier_ref>> [ comma <<identifier_ref>> ] ")" | <<expected "<identifier> or '('">> ) { pin=1 }
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
 attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {
@@ -185,17 +193,18 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= [ <<identifier_ref>> "=" ] Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {
-    pin=1
+// IntelliJ: a "#" directly before "[" makes the list closed
+ListLit       ::= [ HASH ] "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {
+    pin=2
     extends=Literal
     methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]
 }
 ElementList   ::= Embedding { comma Embedding }*
 
 // https://cuelang.org/docs/references/spec/#expressions
-Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
+Operand     ::= Literal | Func | OperandName | "(" Expression ")" {extends=PrimaryExpr}
 Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
-BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal methods=[Literal=""]}
+BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal}
 OperandName ::= <<identifier_ref>> | QualifiedIdent {extends=Operand}
 
 QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
@@ -204,12 +213,22 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 //PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
 // fixme this is a simple rewrite as non-left-recursive for now
 // fixme: commented slice as it's not yet well defined in the grammar
-PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments}* {extends=Expression}
-Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
-Index          ::= "[" Expression (":" Expression)? "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
-Argument       ::= Expression {extends=PrimaryExpr}
-Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {extends=PrimaryExpr pin=1}
+// IntelliJ: "..." after an operand is a spread, and "?" marks an optional reference
+PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread | "?"}* {extends=Expression}
+Selector       ::= "." (<<struct_label>> | simple_string_lit) {extends=PrimaryExpr}
+Index          ::= "[" Expression (":" Expression)? [ comma ] "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
+// IntelliJ: an argument may be labeled, and a trailing "..." applies the function partially
+Argument       ::= [ <<identifier_ref>> ":" ] Expression {extends=PrimaryExpr}
+Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] [ "..." [ comma ] ] ")" {extends=PrimaryExpr pin=1}
+Spread         ::= "..." {extends=PrimaryExpr}
 // fixme Slice is missing
+
+// IntelliJ: a function literal, as in func(a: int) -> int: a + 1, or type, as in func(int) -> int;
+// func without a parameter list is a reference
+Func           ::= <<kw "func">> FuncParams [ "->" Expression [ ":" Expression ] | ":" Expression ] {extends=Operand}
+// a trailing "..." makes the signature open
+FuncParams     ::= "(" [ ( FuncParam | "..." ) { comma ( FuncParam | "..." ) }* [ comma ] ] ")" {pin=1}
+FuncParam      ::= [ <<identifier_ref>> [ PostfixAlias ] [ "?" | "!" ] ":" ] Expression [ "=" Expression ] attribute*
 
 // https://cuelang.org/docs/references/spec/#operators
 Expression ::= UnaryExpr | BinaryExpr | UnificationBinaryExpr // fixme extra root?
@@ -232,27 +251,32 @@ private binary_op  ::= OP_DISJUNCTION | OP_OR | OP_AND | OP_EQ | rel_op | add_op
 private rel_op     ::= REL_OP
 //"+" | "-"
 private add_op     ::= ADD_OP
-//"*" | "/" | "div" | "mod" | "quo" | "rem"
+//"*" | "/"
 private mul_op     ::= MUL_OP
-// "+" | "-" | "!" | "*" | rel_op
-private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
+// "+" | "-" | "!" | "*" | "==" | rel_op
+private unary_op   ::= ADD_OP | EXCL | "*" | OP_EQ | rel_op
 
 
 
 // https://cuelang.org/docs/references/spec/#comprehensions
-Comprehension       ::= Clauses StructLit
+// a comma may follow each clause, so the struct may start on the next line
+Comprehension       ::= Clauses [ comma ] StructLit [ FallbackClause ]
 
-Clauses             ::= StartClause { [ comma ] Clause }*
-StartClause         ::= ForClause | GuardClause
+// a first try clause followed by a comma, as at the end of a line, is a
+// reference, as in CUE; a later try clause may end its line
+Clauses             ::= !(<<kw "try">> comma) StartClause { [ comma ] Clause }*
+StartClause         ::= ForClause | GuardClause | TryClause
 Clause              ::= StartClause | LetClause
-// fixme unclear if keywords are allowed here (i.e. remapped keywords)
-ForClause           ::= <<kw "for">> identifier [ comma identifier ] "in" Expression {
+// keywords may name the variables, as in for import in x
+ForClause           ::= <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref>> ] "in" Expression {
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]
 }
 GuardClause         ::= <<kw "if">> Expression
-// fixme unclear if keywords are allowed here (i.e. remapped keywords)
-LetClause           ::= <<kw "let">> identifier "=" Expression {
+TryClause           ::= <<kw "try">> [ <<identifier_ref>> "=" Expression ]
+FallbackClause      ::= ( <<kw "else">> | <<kw "otherwise">> | <<kw "fallback">> ) ( StructLit | <<expected "'{'">> ) { pin=1 }
+// keywords may name the variable, as in let import = 1
+LetClause           ::= <<kw "let">> <<identifier_ref>> "=" Expression {
     mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]

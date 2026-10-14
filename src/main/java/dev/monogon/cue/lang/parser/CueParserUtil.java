@@ -17,6 +17,20 @@ public class CueParserUtil extends GeneratedParserUtilBase {
     );
 
     /**
+     * Records that the given text was expected at the current position and fails,
+     * so that an enclosing pinned rule reports an error naming it. The text is a
+     * rule name such as {@code <identifier>}, or a token in single quotes, such as
+     * {@code '{'}, which the error message quotes itself.
+     */
+    public static boolean expected(@NotNull PsiBuilder b, @SuppressWarnings("unused") int level, @NotNull String text) {
+        if (text.length() > 2 && text.startsWith("'") && text.endsWith("'")) {
+            text = text.substring(1, text.length() - 1);
+        }
+        addVariant(b, text);
+        return false;
+    }
+
+    /**
      * Reads a keyword token.
      * <p>
      * This is needed because PsiBuilder keeps remapped tokens, even if rules failed to parse later.
@@ -49,12 +63,13 @@ public class CueParserUtil extends GeneratedParserUtilBase {
     }
 
     /**
-     * All keywords are allowed as labels/field names.
+     * All keywords are allowed as labels/field names and as selectors, and so are null, true and false.
+     * These keep their token types, because a remapped token stays remapped if the label is not part of a field.
      * <a href="https://cuelang.org/docs/references/spec/#keywords">...</a>
      */
     public static boolean struct_label(PsiBuilder b, @SuppressWarnings("unused") int level) {
         IElementType type = b.getTokenType();
-        if (CueTokenTypes.IDENTIFIERS.contains(type)) {
+        if (CueTokenTypes.IDENTIFIERS.contains(type) || type == CueTypes.NULL_LIT || type == CueTypes.BOOL_LIT) {
             b.advanceLexer();
             return true;
         }

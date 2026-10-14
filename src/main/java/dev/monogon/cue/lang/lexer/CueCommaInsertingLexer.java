@@ -26,7 +26,8 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
             // end tokens of string literals
             CueTypes.SINGLE_QUOTE_END, CueTypes.DOUBLE_QUOTE_END, CueTypes.MULTILINE_STRING_END, CueTypes.MULTILINE_BYTES_END,
             // fixme string_lit may end with '#', too
-            CueTypes.RIGHT_PAREN, CueTypes.RIGHT_BRACKET, CueTypes.RIGHT_CURLY
+            CueTypes.RIGHT_PAREN, CueTypes.RIGHT_BRACKET, CueTypes.RIGHT_CURLY,
+            CueTypes.QMARK, CueTypes.ELLIPSIS_TOKEN
         ));
 
     public CueCommaInsertingLexer() {
@@ -40,6 +41,7 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
      * - an identifier
      * - null, true, false, bottom, or an integer, floating-point, or string literal
      * - one of the characters ), ], or }
+     * - ? or ...
      *
      * @param baseLexer Our flex lexer
      */
@@ -59,11 +61,29 @@ public class CueCommaInsertingLexer extends LookAheadLexer {
             return;
         }
 
-        if (next == null || next == CueTokenTypes.WHITE_SPACE_NEWLINE || next == CueTokenTypes.COMMENT) {
+        if (next == null
+            || next == CueTokenTypes.COMMENT
+            || (next == CueTokenTypes.WHITE_SPACE_NEWLINE && !continuesOnNextLine(baseLexer))) {
             addToken(baseLexer.getTokenStart(), CueTokenTypes.COMMA_IMPLICIT);
         }
 
         advanceAs(baseLexer, next);
+    }
+
+    /**
+     * Reports whether the first character after the newline at the current token and any further whitespace is a
+     * comma or a colon. As in CUE, no comma is inserted before them, so that a colon may start the line after a label.
+     */
+    private static boolean continuesOnNextLine(@NotNull Lexer baseLexer) {
+        CharSequence buffer = baseLexer.getBufferSequence();
+        int end = baseLexer.getBufferEnd();
+        for (int i = baseLexer.getTokenStart(); i < end; i++) {
+            char c = buffer.charAt(i);
+            if (c != ' ' && c != '\t' && c != '\r' && c != '\n') {
+                return c == ',' || c == ':';
+            }
+        }
+        return false;
     }
 
     private void skipWhitespace(@NotNull Lexer baseLexer) {

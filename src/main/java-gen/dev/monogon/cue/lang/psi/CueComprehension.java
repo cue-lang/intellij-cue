@@ -10,6 +10,9 @@ public interface CueComprehension extends CueCompositeElement {
   @NotNull
   CueClauses getClauses();
 
+  @Nullable
+  CueFallbackClause getFallbackClause();
+
   @NotNull
   CueStructLit getStructLit();
 

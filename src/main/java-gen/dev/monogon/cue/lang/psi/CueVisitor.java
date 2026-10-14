@@ -59,12 +59,28 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFallbackClause(@NotNull CueFallbackClause o) {
+    visitCompositeElement(o);
+  }
+
   public void visitField(@NotNull CueField o) {
     visitDeclaration(o);
   }
 
   public void visitForClause(@NotNull CueForClause o) {
     visitBlock(o);
+  }
+
+  public void visitFunc(@NotNull CueFunc o) {
+    visitOperand(o);
+  }
+
+  public void visitFuncParam(@NotNull CueFuncParam o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFuncParams(@NotNull CueFuncParams o) {
+    visitCompositeElement(o);
   }
 
   public void visitGuardClause(@NotNull CueGuardClause o) {
@@ -127,6 +143,10 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitPostfixAlias(@NotNull CuePostfixAlias o) {
+    visitCompositeElement(o);
+  }
+
   public void visitPrimaryExpr(@NotNull CuePrimaryExpr o) {
     visitExpression(o);
   }
@@ -139,6 +159,10 @@ public class CueVisitor extends PsiElementVisitor {
     visitPrimaryExpr(o);
   }
 
+  public void visitSpread(@NotNull CueSpread o) {
+    visitPrimaryExpr(o);
+  }
+
   public void visitStartClause(@NotNull CueStartClause o) {
     visitCompositeElement(o);
   }
@@ -146,6 +170,10 @@ public class CueVisitor extends PsiElementVisitor {
   public void visitStructLit(@NotNull CueStructLit o) {
     visitLiteral(o);
     // visitBlock(o);
+  }
+
+  public void visitTryClause(@NotNull CueTryClause o) {
+    visitCompositeElement(o);
   }
 
   public void visitUnaryExpr(@NotNull CueUnaryExpr o) {

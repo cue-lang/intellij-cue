@@ -40,6 +40,12 @@ public class CueLabelExprImpl extends CueCompositeElementImpl implements CueLabe
   }
 
   @Override
+  @Nullable
+  public CuePostfixAlias getPostfixAlias() {
+    return findChildByClass(CuePostfixAlias.class);
+  }
+
+  @Override
   public boolean isOptionalFieldConstraint() {
     return CuePsiImplUtil.isOptionalFieldConstraint(this);
   }

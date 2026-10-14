@@ -1,10 +1,8 @@
 a: [... string]
 b: [... string,]
 c: [
-    ...
-    string
+    ...string
 ]
 d: [
-    ...
-    string,
+    ...string,
 ]

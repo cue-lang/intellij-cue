@@ -139,9 +139,73 @@ idea {
 }
 
 tasks {
+    // The tests read their data from src/test/data at run time. Declare it as
+    // an input, so that changing the data runs the tests again rather than
+    // reusing results from the build cache.
+    test {
+        inputs.dir("src/test/data").withPathSensitivity(PathSensitivity.RELATIVE)
+    }
+
     generateLexer {
         sourceFile = project.file("src/grammar/cue.flex")
         targetOutputDir = project.file("src/main/java-gen/dev/monogon/cue/lang/lexer")
         purgeOldFiles = true
+    }
+    generateParser {
+        sourceFile = project.file("src/grammar/cue.bnf")
+        targetRootOutputDir = project.file("src/main/java-gen")
+        pathToParser = "dev/monogon/cue/lang/parser/CueParser.java"
+        pathToPsiRoot = "dev/monogon/cue/lang/psi"
+        purgeOldFiles = true
+        // The generator finds the methods of psiImplUtilClass in the compiled
+        // classes; the committed generated sources make them compilable first.
+        dependsOn("compileJava", "compileKotlin")
+        doFirst {
+            classpath = classpath + files(sourceSets.main.get().output, configurations.compileClasspath)
+        }
+    }
+
+    // syncSyntaxCorpus refreshes the copy of the CUE syntax corpus that
+    // CueSyntaxCorpusTest reads, its pass, preview and fail directories, from a
+    // checkout of cue-lang/cue that is exactly at a tag, and records the tag in
+    // SOURCE:
+    //
+    //     ./gradlew syncSyntaxCorpus -PcueCheckout=<path>
+    register("syncSyntaxCorpus") {
+        group = "verification"
+        description = "Refreshes the CUE syntax corpus test data from a tagged cue-lang/cue checkout."
+        doLast {
+            val checkout = file(
+                providers.gradleProperty("cueCheckout").orNull
+                    ?: throw GradleException("set -PcueCheckout to a cue-lang/cue checkout at a tag")
+            )
+            val git = ProcessBuilder("git", "-C", checkout.path, "describe", "--exact-match", "--tags")
+                .redirectErrorStream(true)
+                .start()
+            val tag = git.inputStream.bufferedReader().readText().trim()
+            if (git.waitFor() != 0) {
+                throw GradleException("$checkout is not a git checkout exactly at a tag")
+            }
+            val source = checkout.resolve("cue/parser/testdata/syntax")
+            val target = file("src/test/data/lang/cue/syntax")
+            var count = 0
+            for (dir in listOf("pass", "preview", "fail")) {
+                val from = source.resolve(dir)
+                val to = target.resolve(dir)
+                val names = from.listFiles { f -> f.name.endsWith(".cue") }?.map { it.name }?.toSet().orEmpty()
+                if (names.isEmpty()) {
+                    throw GradleException("no corpus files in $from")
+                }
+                to.mkdirs()
+                to.listFiles { f -> f.name.endsWith(".cue") && f.name !in names }?.forEach {
+                    it.delete()
+                    to.resolve(it.name.removeSuffix(".cue") + ".txt").delete()
+                }
+                names.forEach { from.resolve(it).copyTo(to.resolve(it), overwrite = true) }
+                count += names.size
+            }
+            target.resolve("SOURCE").writeText("cue-lang/cue $tag\n")
+            println("copied $count corpus files from cue-lang/cue $tag")
+        }
     }
 }

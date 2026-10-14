@@ -13,4 +13,7 @@ public interface CueStartClause extends CueCompositeElement {
   @Nullable
   CueGuardClause getGuardClause();
 
+  @Nullable
+  CueTryClause getTryClause();
+
 }

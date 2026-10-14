@@ -1,0 +1,7 @@
+INT_LIT ('0x_1f')
+NEWLINE ('\n')
+INT_LIT ('0X_1F')
+NEWLINE ('\n')
+INT_LIT ('0o_755')
+NEWLINE ('\n')
+INT_LIT ('0b_0101')

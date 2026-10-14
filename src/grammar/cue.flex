@@ -75,6 +75,28 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
       return count == escapePrefixLength;
   }
 
+  /**
+   * Handles a match of one or more #, a triple quote, and one or more #.
+   * As in CUE, it is a one-line raw string holding a single quote, as in
+   * #"""#, when at least as many # follow the triple quote as precede it;
+   * then only the opening #..." is kept. Otherwise only the opening
+   * #...""" is kept, which starts a multiline string.
+   */
+  private boolean isOneLineRawQuote() {
+      int length = yylength();
+      int prefix = 0;
+      while (yycharat(prefix) == '#') {
+          prefix++;
+      }
+      int suffix = length - prefix - 3;
+      if (suffix >= prefix) {
+          yypushback(length - prefix - 1);
+          return true;
+      }
+      yypushback(suffix);
+      return false;
+  }
+
   private boolean isEscapeSuffix() {
       int count = 0;
       int length = yylength();
@@ -131,9 +153,9 @@ decimal_lit = "0" | [1-9] ("_"? {decimal_digit})*
 decimals    = {decimal_digit} ("_"? {decimal_digit})*
 si_lit      = {decimals} ("." {decimals})? {multiplier}
               | "." {decimals} {multiplier}
-binary_lit  = "0b" {binary_digit} ("_"? {binary_digit})*
-hex_lit     = "0" [xX] {hex_digit} ("_"? {hex_digit})*
-octal_lit   = "0o" {octal_digit} ("_"? {octal_digit})*
+binary_lit  = "0b" ("_"? {binary_digit})+
+hex_lit     = "0" [xX] ("_"? {hex_digit})+
+octal_lit   = "0o" ("_"? {octal_digit})+
 multiplier  = [KMGTP] "i"?
 
 // https://cuelang.org/docs/references/spec/#decimal-floating-point-literals
@@ -215,12 +237,17 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     "]"     { return RIGHT_BRACKET; }
     "("     { pushState(PARENTHESIS); return LEFT_PAREN; }
     ")"     { return RIGHT_PAREN; }
+    "~"     { return TILDE; }
+    "->"    { return ARROW; }
+    // "#" directly before "[" or "{" opens a closed list or struct
+    "#" / [\[\{]
+            { return HASH; }
 
     "!=" | "<" | "<=" | ">" | ">=" | "=~" | "!~"
             { return REL_OP; }
     "+" | "-"
             { return ADD_OP; }
-    "*" | "/" | "div" | "mod" | "quo" | "rem"
+    "*" | "/"
             { return MUL_OP; }
     "|"     { return OP_DISJUNCTION; }
     "&"     { return OP_UNIFICATION; }
@@ -238,7 +265,18 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     "len"
    | "close"
    | "and"
-   | "or"   { return IDENTIFIER_PREDECLARED; }
+   | "or"
+   | "div"
+   | "mod"
+   | "quo"
+   | "rem"
+   | "matchN"
+   | "matchIf"
+   | "error"
+   | "validator"  { return IDENTIFIER_PREDECLARED; }
+
+    // the enclosing struct
+    "self"  { return IDENTIFIER_PREDECLARED; }
 
     // types
     // null is also a null_lit
@@ -269,6 +307,9 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     {identifier}            { return IDENTIFIER; }
     // end of identifiers
 
+    // an integer directly before "...", as in the spread 1..., is not the float 1.
+    {decimal_lit} / "..."
+                    { return INT_LIT; }
     {float_lit}     { return FLOAT_LIT; }
     {decimal_lit}
      | {si_lit}
@@ -278,8 +319,12 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
 
     [#]* "\""                   { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
     [#]* "\"\"\""               { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
+    [#]+ "\"\"\"" [#]+          { if (isOneLineRawQuote()) { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
+                                  pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
     [#]* "'"                    { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
     [#]* "'''"                  { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
+    [#]+ "'''" [#]+             { if (isOneLineRawQuote()) { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
+                                  pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}* {newline}?   { return COMMENT; }
 }

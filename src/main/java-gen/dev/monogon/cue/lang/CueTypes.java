@@ -24,8 +24,12 @@ public interface CueTypes {
   IElementType ELLIPSIS = new CueCompositeElementType("ELLIPSIS");
   IElementType EMBEDDING = new CueCompositeElementType("EMBEDDING");
   IElementType EXPRESSION = new CueCompositeElementType("EXPRESSION");
+  IElementType FALLBACK_CLAUSE = new CueCompositeElementType("FALLBACK_CLAUSE");
   IElementType FIELD = new CueCompositeElementType("FIELD");
   IElementType FOR_CLAUSE = new CueCompositeElementType("FOR_CLAUSE");
+  IElementType FUNC = new CueCompositeElementType("FUNC");
+  IElementType FUNC_PARAM = new CueCompositeElementType("FUNC_PARAM");
+  IElementType FUNC_PARAMS = new CueCompositeElementType("FUNC_PARAMS");
   IElementType GUARD_CLAUSE = new CueCompositeElementType("GUARD_CLAUSE");
   IElementType IMPORT_DECL = new CueCompositeElementType("IMPORT_DECL");
   IElementType IMPORT_LOCATION = new CueCompositeElementType("IMPORT_LOCATION");
@@ -44,17 +48,21 @@ public interface CueTypes {
   IElementType OPERAND = new CueCompositeElementType("OPERAND");
   IElementType OPERAND_NAME = new CueCompositeElementType("OPERAND_NAME");
   IElementType PACKAGE_CLAUSE = new CueCompositeElementType("PACKAGE_CLAUSE");
+  IElementType POSTFIX_ALIAS = new CueCompositeElementType("POSTFIX_ALIAS");
   IElementType PRIMARY_EXPR = new CueCompositeElementType("PRIMARY_EXPR");
   IElementType QUALIFIED_IDENT = new CueCompositeElementType("QUALIFIED_IDENT");
   IElementType SELECTOR = new CueCompositeElementType("SELECTOR");
   IElementType SIMPLE_BYTES_LIT = new CueCompositeElementType("SIMPLE_BYTES_LIT");
   IElementType SIMPLE_STRING_LIT = new CueCompositeElementType("SIMPLE_STRING_LIT");
+  IElementType SPREAD = new CueCompositeElementType("SPREAD");
   IElementType START_CLAUSE = new CueCompositeElementType("START_CLAUSE");
   IElementType STRUCT_LIT = new CueCompositeElementType("STRUCT_LIT");
+  IElementType TRY_CLAUSE = new CueCompositeElementType("TRY_CLAUSE");
   IElementType UNARY_EXPR = new CueCompositeElementType("UNARY_EXPR");
   IElementType UNIFICATION_BINARY_EXPR = new CueCompositeElementType("UNIFICATION_BINARY_EXPR");
 
   IElementType ADD_OP = new CueTokenType("ADD_OP");
+  IElementType ARROW = new CueTokenType("->");
   IElementType AT = new CueTokenType("@");
   IElementType ATTRIBUTE_VALUE = new CueTokenType("ATTRIBUTE_VALUE");
   IElementType BOOL_LIT = new CueTokenType("BOOL_LIT");
@@ -70,6 +78,7 @@ public interface CueTypes {
   IElementType ESCAPED_CHAR = new CueTokenType("ESCAPED_CHAR");
   IElementType EXCL = new CueTokenType("!");
   IElementType FLOAT_LIT = new CueTokenType("FLOAT_LIT");
+  IElementType HASH = new CueTokenType("#");
   IElementType IDENTIFIER = new CueTokenType("IDENTIFIER");
   IElementType IDENTIFIER_PREDECLARED = new CueTokenType("IDENTIFIER_PREDECLARED");
   IElementType INTERPOLATION_END = new CueTokenType("INTERPOLATION_END");
@@ -98,6 +107,7 @@ public interface CueTypes {
   IElementType RIGHT_PAREN = new CueTokenType(")");
   IElementType SINGLE_QUOTE = new CueTokenType("SINGLE_QUOTE");
   IElementType SINGLE_QUOTE_END = new CueTokenType("'");
+  IElementType TILDE = new CueTokenType("~");
   IElementType UNICODE_VALUE = new CueTokenType("UNICODE_VALUE");
 
   class Factory {
@@ -105,6 +115,9 @@ public interface CueTypes {
       IElementType type = node.getElementType();
       if (type == ALIAS_EXPR) {
         return new CueAliasExprImpl(node);
+      }
+      else if (type == ARGUMENT) {
+        return new CueArgumentImpl(node);
       }
       else if (type == ARGUMENTS) {
         return new CueArgumentsImpl(node);
@@ -142,11 +155,23 @@ public interface CueTypes {
       else if (type == EMBEDDING) {
         return new CueEmbeddingImpl(node);
       }
+      else if (type == FALLBACK_CLAUSE) {
+        return new CueFallbackClauseImpl(node);
+      }
       else if (type == FIELD) {
         return new CueFieldImpl(node);
       }
       else if (type == FOR_CLAUSE) {
         return new CueForClauseImpl(node);
+      }
+      else if (type == FUNC) {
+        return new CueFuncImpl(node);
+      }
+      else if (type == FUNC_PARAM) {
+        return new CueFuncParamImpl(node);
+      }
+      else if (type == FUNC_PARAMS) {
+        return new CueFuncParamsImpl(node);
       }
       else if (type == GUARD_CLAUSE) {
         return new CueGuardClauseImpl(node);
@@ -199,6 +224,9 @@ public interface CueTypes {
       else if (type == PACKAGE_CLAUSE) {
         return new CuePackageClauseImpl(node);
       }
+      else if (type == POSTFIX_ALIAS) {
+        return new CuePostfixAliasImpl(node);
+      }
       else if (type == PRIMARY_EXPR) {
         return new CuePrimaryExprImpl(node);
       }
@@ -214,11 +242,17 @@ public interface CueTypes {
       else if (type == SIMPLE_STRING_LIT) {
         return new CueSimpleStringLitImpl(node);
       }
+      else if (type == SPREAD) {
+        return new CueSpreadImpl(node);
+      }
       else if (type == START_CLAUSE) {
         return new CueStartClauseImpl(node);
       }
       else if (type == STRUCT_LIT) {
         return new CueStructLitImpl(node);
+      }
+      else if (type == TRY_CLAUSE) {
+        return new CueTryClauseImpl(node);
       }
       else if (type == UNARY_EXPR) {
         return new CueUnaryExprImpl(node);

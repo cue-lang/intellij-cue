@@ -10,7 +10,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static dev.monogon.cue.lang.CueTypes.*;
 import dev.monogon.cue.lang.psi.*;
 
-public abstract class CueArgumentImpl extends CuePrimaryExprImpl implements CueArgument {
+public class CueArgumentImpl extends CuePrimaryExprImpl implements CueArgument {
 
   public CueArgumentImpl(@NotNull ASTNode node) {
     super(node);
@@ -25,6 +25,12 @@ public abstract class CueArgumentImpl extends CuePrimaryExprImpl implements CueA
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof CueVisitor) accept((CueVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public CueExpression getExpression() {
+    return findNotNullChildByClass(CueExpression.class);
   }
 
 }
