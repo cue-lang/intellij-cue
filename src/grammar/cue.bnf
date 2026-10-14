@@ -275,8 +275,8 @@ ForClause           ::= <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref
 GuardClause         ::= <<kw "if">> Expression
 TryClause           ::= <<kw "try">> [ <<identifier_ref>> "=" Expression ]
 FallbackClause      ::= ( <<kw "else">> | <<kw "otherwise">> | <<kw "fallback">> ) ( StructLit | <<expected "'{'">> ) { pin=1 }
-// fixme unclear if keywords are allowed here (i.e. remapped keywords)
-LetClause           ::= <<kw "let">> identifier "=" Expression {
+// keywords may name the variable, as in let import = 1
+LetClause           ::= <<kw "let">> <<identifier_ref>> "=" Expression {
     mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]
