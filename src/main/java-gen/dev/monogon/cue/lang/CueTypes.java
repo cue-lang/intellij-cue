@@ -44,11 +44,13 @@ public interface CueTypes {
   IElementType OPERAND = new CueCompositeElementType("OPERAND");
   IElementType OPERAND_NAME = new CueCompositeElementType("OPERAND_NAME");
   IElementType PACKAGE_CLAUSE = new CueCompositeElementType("PACKAGE_CLAUSE");
+  IElementType POSTFIX_ALIAS = new CueCompositeElementType("POSTFIX_ALIAS");
   IElementType PRIMARY_EXPR = new CueCompositeElementType("PRIMARY_EXPR");
   IElementType QUALIFIED_IDENT = new CueCompositeElementType("QUALIFIED_IDENT");
   IElementType SELECTOR = new CueCompositeElementType("SELECTOR");
   IElementType SIMPLE_BYTES_LIT = new CueCompositeElementType("SIMPLE_BYTES_LIT");
   IElementType SIMPLE_STRING_LIT = new CueCompositeElementType("SIMPLE_STRING_LIT");
+  IElementType SPREAD = new CueCompositeElementType("SPREAD");
   IElementType START_CLAUSE = new CueCompositeElementType("START_CLAUSE");
   IElementType STRUCT_LIT = new CueCompositeElementType("STRUCT_LIT");
   IElementType UNARY_EXPR = new CueCompositeElementType("UNARY_EXPR");
@@ -202,6 +204,9 @@ public interface CueTypes {
       else if (type == PACKAGE_CLAUSE) {
         return new CuePackageClauseImpl(node);
       }
+      else if (type == POSTFIX_ALIAS) {
+        return new CuePostfixAliasImpl(node);
+      }
       else if (type == PRIMARY_EXPR) {
         return new CuePrimaryExprImpl(node);
       }
@@ -216,6 +221,9 @@ public interface CueTypes {
       }
       else if (type == SIMPLE_STRING_LIT) {
         return new CueSimpleStringLitImpl(node);
+      }
+      else if (type == SPREAD) {
+        return new CueSpreadImpl(node);
       }
       else if (type == START_CLAUSE) {
         return new CueStartClauseImpl(node);

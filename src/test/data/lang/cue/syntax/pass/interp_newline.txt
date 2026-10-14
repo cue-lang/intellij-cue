@@ -32,12 +32,9 @@ FILE
           PsiWhiteSpace(' ')
           CueBasicLitImpl(BASIC_LIT)
             PsiElement(INT_LIT)('2')
-        PsiErrorElement:'"', ':' or INTERPOLATION_END expected
-          <empty list>
-  PsiElement(,)('')
-  PsiWhiteSpace('\n')
-  PsiErrorElement:<expression> expected, got ')'
-    PsiElement(INTERPOLATION_END)(')')
-  PsiElement(UNICODE_VALUE)('y')
-  PsiElement(")('"')
+        PsiElement(,)('')
+        PsiWhiteSpace('\n')
+        PsiElement(INTERPOLATION_END)(')')
+      PsiElement(UNICODE_VALUE)('y')
+      PsiElement(")('"')
   PsiElement(,)('')

@@ -90,7 +90,8 @@ Please not the following important differences:
 }
 
 // https://cuelang.org/docs/references/spec/#source-file-organization
-private file ::= { attribute comma }* [ PackageClause comma ]  { ImportDecl comma }* { Declaration comma }*
+// IntelliJ: attributes before the package clause are read by the first loop
+private file ::= { attribute comma }* [ PackageClause comma ] [ { attribute comma }* ImportDecl comma ] { ImportDecl comma }* { Declaration comma }*
 PackageClause  ::= "package" PackageName
 private PackageName ::= identifier
 
@@ -131,7 +132,7 @@ multiline_bytes_lit ::= MULTILINE_BYTES_START NEWLINE { unicode_value | interpol
     methods=[openingQuote="MULTILINE_BYTES_START" closingQuote="MULTILINE_BYTES_END"]
 }
 
-interpolation ::= INTERPOLATION_START Expression INTERPOLATION_END { pin=1 }
+interpolation ::= INTERPOLATION_START Expression [ comma ] INTERPOLATION_END { pin=1 }
 
 private string_lit ::= simple_string_lit
                    | multiline_string_lit
@@ -155,8 +156,9 @@ Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods=[getPresentation]}
 Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
-LabelExpr       ::= LabelName ["?" | "!"]
-                  | "[" AliasExpr "]" {
+// IntelliJ: the postfix alias comes before "?" or "!", as CUE's parser requires
+LabelExpr       ::= LabelName [ PostfixAlias ] ["?" | "!"]
+                  | "[" AliasExpr "]" [ PostfixAlias ] {
     methods=[isOptionalFieldConstraint isRequiredFieldConstraint]
 }
 LabelName       ::= <<struct_label>>
@@ -164,6 +166,9 @@ LabelName       ::= <<struct_label>>
                   | "(" AliasExpr ")" {
     methods=[isOptionalFieldName isRequiredFieldName isDynamicFieldName]
 }
+
+// https://cuelang.org/docs/references/spec/#aliases
+PostfixAlias    ::= "~" ( <<identifier_ref>> | "(" <<identifier_ref>> [ comma <<identifier_ref>> ] ")" | <<expected "<identifier> or '('">> ) { pin=1 }
 
 // fixme remap identifier here, i.e. accept keywords as identifier?
 attribute       ::= "@" <<attribute_name>> "(" attr_tokens ")" {
@@ -206,11 +211,13 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 //PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
 // fixme this is a simple rewrite as non-left-recursive for now
 // fixme: commented slice as it's not yet well defined in the grammar
-PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments}* {extends=Expression}
+// IntelliJ: "..." after an operand is a spread
+PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread}* {extends=Expression}
 Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
-Index          ::= "[" Expression (":" Expression)? "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
+Index          ::= "[" Expression (":" Expression)? [ comma ] "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
 Argument       ::= Expression {extends=PrimaryExpr}
 Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {extends=PrimaryExpr pin=1}
+Spread         ::= "..." {extends=PrimaryExpr}
 // fixme Slice is missing
 
 // https://cuelang.org/docs/references/spec/#operators
@@ -236,8 +243,8 @@ private rel_op     ::= REL_OP
 private add_op     ::= ADD_OP
 //"*" | "/"
 private mul_op     ::= MUL_OP
-// "+" | "-" | "!" | "*" | rel_op
-private unary_op   ::= ADD_OP | EXCL | "*" | rel_op
+// "+" | "-" | "!" | "*" | "==" | rel_op
+private unary_op   ::= ADD_OP | EXCL | "*" | OP_EQ | rel_op
 
 
 
