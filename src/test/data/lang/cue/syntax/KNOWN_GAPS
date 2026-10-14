@@ -2,7 +2,6 @@
 # CueSyntaxCorpusTest fails if a listed file parses without errors.
 pass/comprehension_body_next_line.cue
 pass/let_keyword_name.cue
-pass/literal_selectors.cue
 pass/raw_string_quote.cue
 preview/try_body_next_line.cue
 preview/try_later_clause_next_line.cue
