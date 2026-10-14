@@ -131,9 +131,9 @@ decimal_lit = "0" | [1-9] ("_"? {decimal_digit})*
 decimals    = {decimal_digit} ("_"? {decimal_digit})*
 si_lit      = {decimals} ("." {decimals})? {multiplier}
               | "." {decimals} {multiplier}
-binary_lit  = "0b" {binary_digit} ("_"? {binary_digit})*
-hex_lit     = "0" [xX] {hex_digit} ("_"? {hex_digit})*
-octal_lit   = "0o" {octal_digit} ("_"? {octal_digit})*
+binary_lit  = "0b" ("_"? {binary_digit})+
+hex_lit     = "0" [xX] ("_"? {hex_digit})+
+octal_lit   = "0o" ("_"? {octal_digit})+
 multiplier  = [KMGTP] "i"?
 
 // https://cuelang.org/docs/references/spec/#decimal-floating-point-literals
