@@ -285,6 +285,9 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
     {identifier}            { return IDENTIFIER; }
     // end of identifiers
 
+    // an integer directly before "...", as in the spread 1..., is not the float 1.
+    {decimal_lit} / "..."
+                    { return INT_LIT; }
     {float_lit}     { return FLOAT_LIT; }
     {decimal_lit}
      | {si_lit}
