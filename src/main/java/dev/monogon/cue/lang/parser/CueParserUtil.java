@@ -63,7 +63,7 @@ public class CueParserUtil extends GeneratedParserUtilBase {
     }
 
     /**
-     * All keywords are allowed as labels/field names, and so are null, true and false.
+     * All keywords are allowed as labels/field names and as selectors, and so are null, true and false.
      * These keep their token types, because a remapped token stays remapped if the label is not part of a field.
      * <a href="https://cuelang.org/docs/references/spec/#keywords">...</a>
      */

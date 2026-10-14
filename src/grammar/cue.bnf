@@ -215,7 +215,7 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 // fixme: commented slice as it's not yet well defined in the grammar
 // IntelliJ: "..." after an operand is a spread, and "?" marks an optional reference
 PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread | "?"}* {extends=Expression}
-Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
+Selector       ::= "." (<<struct_label>> | simple_string_lit) {extends=PrimaryExpr}
 Index          ::= "[" Expression (":" Expression)? [ comma ] "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
 // IntelliJ: an argument may be labeled, and a trailing "..." applies the function partially
 Argument       ::= [ <<identifier_ref>> ":" ] Expression {extends=PrimaryExpr}
