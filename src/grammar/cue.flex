@@ -75,6 +75,26 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
       return count == escapePrefixLength;
   }
 
+  /** Returns the number of # at the start of the current match. */
+  private int hashPrefixLength() {
+      int prefix = 0;
+      while (prefix < yylength() && yycharat(prefix) == '#') {
+          prefix++;
+      }
+      return prefix;
+  }
+
+  /**
+   * Reports whether the current match, one or more #, a triple quote and one
+   * or more #, is a one-line raw string holding a single quote, as in #"""#.
+   * As in CUE, it is when at least as many # follow the triple quote as
+   * precede it.
+   */
+  private boolean isOneLineRawQuote() {
+      int prefix = hashPrefixLength();
+      return yylength() - prefix - 3 >= prefix;
+  }
+
   private boolean isEscapeSuffix() {
       int count = 0;
       int length = yylength();
@@ -297,8 +317,15 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
 
     [#]* "\""                   { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
     [#]* "\"\"\""               { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
+    // One or more #, a triple quote and one or more #: keep only the opening #..." of a one-line raw
+    // string holding a quote, as in #"""#, or else the opening #...""" of a multiline string.
+    [#]+ "\"\"\"" [#]+          { if (isOneLineRawQuote()) { yypushback(yylength() - hashPrefixLength() - 1); pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
+                                  yypushback(yylength() - hashPrefixLength() - 3); pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
     [#]* "'"                    { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
     [#]* "'''"                  { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
+    // As above, for bytes.
+    [#]+ "'''" [#]+             { if (isOneLineRawQuote()) { yypushback(yylength() - hashPrefixLength() - 1); pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
+                                  yypushback(yylength() - hashPrefixLength() - 3); pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}* {newline}?   { return COMMENT; }
 }
