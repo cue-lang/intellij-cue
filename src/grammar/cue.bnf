@@ -147,8 +147,9 @@ methods = [getReferences]
 
 // https://cuelang.org/docs/references/spec/#structs
 // fixme change of grammar rules
-StructLit       ::= "{" [ Declaration {comma Declaration}* comma? ] "}" {
-    pin=1 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
+// IntelliJ: a "#" directly before "{" makes the struct closed
+StructLit       ::= [ HASH ] "{" [ Declaration {comma Declaration}* comma? ] "}" {
+    pin=2 extends=Literal implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=[leftBrace="LEFT_CURLY" rightBrace="RIGHT_CURLY"]
 }
 Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // IntelliJ: moved LetClause before Embedding to fix parsing
@@ -192,8 +193,9 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 AliasExpr  ::= [ <<identifier_ref>> "=" ] Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
-ListLit       ::= "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {
-    pin=1
+// IntelliJ: a "#" directly before "[" makes the list closed
+ListLit       ::= [ HASH ] "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] "]" {
+    pin=2
     extends=Literal
     methods=[leftBracket="LEFT_BRACKET" rightBracket="RIGHT_BRACKET"]
 }
@@ -211,8 +213,8 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 //PrimaryExpr ::= Operand | PrimaryExpr Selector | PrimaryExpr Index | PrimaryExpr Slice | PrimaryExpr Arguments
 // fixme this is a simple rewrite as non-left-recursive for now
 // fixme: commented slice as it's not yet well defined in the grammar
-// IntelliJ: "..." after an operand is a spread
-PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread}* {extends=Expression}
+// IntelliJ: "..." after an operand is a spread, and "?" marks an optional reference
+PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread | "?"}* {extends=Expression}
 Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
 Index          ::= "[" Expression (":" Expression)? [ comma ] "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
 Argument       ::= Expression {extends=PrimaryExpr}
@@ -249,10 +251,10 @@ private unary_op   ::= ADD_OP | EXCL | "*" | OP_EQ | rel_op
 
 
 // https://cuelang.org/docs/references/spec/#comprehensions
-Comprehension       ::= Clauses StructLit
+Comprehension       ::= Clauses StructLit [ FallbackClause ]
 
 Clauses             ::= StartClause { [ comma ] Clause }*
-StartClause         ::= ForClause | GuardClause
+StartClause         ::= ForClause | GuardClause | TryClause
 Clause              ::= StartClause | LetClause
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 ForClause           ::= <<kw "for">> identifier [ comma identifier ] "in" Expression {
@@ -260,6 +262,8 @@ ForClause           ::= <<kw "for">> identifier [ comma identifier ] "in" Expres
     methods=["isValidBlock"]
 }
 GuardClause         ::= <<kw "if">> Expression
+TryClause           ::= <<kw "try">> [ <<identifier_ref>> "=" Expression ]
+FallbackClause      ::= ( <<kw "else">> | <<kw "otherwise">> | <<kw "fallback">> ) ( StructLit | <<expected "'{'">> ) { pin=1 }
 // fixme unclear if keywords are allowed here (i.e. remapped keywords)
 LetClause           ::= <<kw "let">> identifier "=" Expression {
     mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"

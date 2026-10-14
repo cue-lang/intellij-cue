@@ -24,6 +24,7 @@ public interface CueTypes {
   IElementType ELLIPSIS = new CueCompositeElementType("ELLIPSIS");
   IElementType EMBEDDING = new CueCompositeElementType("EMBEDDING");
   IElementType EXPRESSION = new CueCompositeElementType("EXPRESSION");
+  IElementType FALLBACK_CLAUSE = new CueCompositeElementType("FALLBACK_CLAUSE");
   IElementType FIELD = new CueCompositeElementType("FIELD");
   IElementType FOR_CLAUSE = new CueCompositeElementType("FOR_CLAUSE");
   IElementType GUARD_CLAUSE = new CueCompositeElementType("GUARD_CLAUSE");
@@ -53,6 +54,7 @@ public interface CueTypes {
   IElementType SPREAD = new CueCompositeElementType("SPREAD");
   IElementType START_CLAUSE = new CueCompositeElementType("START_CLAUSE");
   IElementType STRUCT_LIT = new CueCompositeElementType("STRUCT_LIT");
+  IElementType TRY_CLAUSE = new CueCompositeElementType("TRY_CLAUSE");
   IElementType UNARY_EXPR = new CueCompositeElementType("UNARY_EXPR");
   IElementType UNIFICATION_BINARY_EXPR = new CueCompositeElementType("UNIFICATION_BINARY_EXPR");
 
@@ -147,6 +149,9 @@ public interface CueTypes {
       else if (type == EMBEDDING) {
         return new CueEmbeddingImpl(node);
       }
+      else if (type == FALLBACK_CLAUSE) {
+        return new CueFallbackClauseImpl(node);
+      }
       else if (type == FIELD) {
         return new CueFieldImpl(node);
       }
@@ -230,6 +235,9 @@ public interface CueTypes {
       }
       else if (type == STRUCT_LIT) {
         return new CueStructLitImpl(node);
+      }
+      else if (type == TRY_CLAUSE) {
+        return new CueTryClauseImpl(node);
       }
       else if (type == UNARY_EXPR) {
         return new CueUnaryExprImpl(node);

@@ -39,4 +39,10 @@ public class CueStartClauseImpl extends CueCompositeElementImpl implements CueSt
     return findChildByClass(CueGuardClause.class);
   }
 
+  @Override
+  @Nullable
+  public CueTryClause getTryClause() {
+    return findChildByClass(CueTryClause.class);
+  }
+
 }

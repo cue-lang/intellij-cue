@@ -34,6 +34,12 @@ public class CueComprehensionImpl extends CueCompositeElementImpl implements Cue
   }
 
   @Override
+  @Nullable
+  public CueFallbackClause getFallbackClause() {
+    return findChildByClass(CueFallbackClause.class);
+  }
+
+  @Override
   @NotNull
   public CueStructLit getStructLit() {
     return findNotNullChildByClass(CueStructLit.class);

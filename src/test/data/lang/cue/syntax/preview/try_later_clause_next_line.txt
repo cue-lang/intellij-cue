@@ -52,7 +52,7 @@ FILE
     PsiElement(IDENTIFIER)('y')
   PsiElement(DUMMY_BLOCK)
     PsiWhiteSpace(' ')
-    PsiElement(IDENTIFIER)('try')
+    PsiElement(KEYWORD)('try')
     PsiElement(,)('')
   PsiWhiteSpace('\n')
   PsiWhiteSpace('\t')
