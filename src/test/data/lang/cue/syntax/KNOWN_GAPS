@@ -1,4 +1,3 @@
 # Corpus files that must be valid but that the parser does not yet handle.
 # CueSyntaxCorpusTest fails if a listed file parses without errors.
-pass/let_keyword_name.cue
 pass/raw_string_quote.cue
