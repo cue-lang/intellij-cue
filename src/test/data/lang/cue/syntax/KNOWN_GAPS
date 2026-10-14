@@ -3,7 +3,6 @@
 comprehension_body_next_line.cue
 let_keyword_name.cue
 literal_selectors.cue
-number_prefix_underscore.cue
 raw_string_quote.cue
 try_body_next_line.cue
 try_later_clause_next_line.cue
