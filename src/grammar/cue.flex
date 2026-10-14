@@ -75,6 +75,28 @@ import static dev.monogon.cue.lang.CueTokenTypes.*;
       return count == escapePrefixLength;
   }
 
+  /**
+   * Handles a match of one or more #, a triple quote, and one or more #.
+   * As in CUE, it is a one-line raw string holding a single quote, as in
+   * #"""#, when at least as many # follow the triple quote as precede it;
+   * then only the opening #..." is kept. Otherwise only the opening
+   * #...""" is kept, which starts a multiline string.
+   */
+  private boolean isOneLineRawQuote() {
+      int length = yylength();
+      int prefix = 0;
+      while (yycharat(prefix) == '#') {
+          prefix++;
+      }
+      int suffix = length - prefix - 3;
+      if (suffix >= prefix) {
+          yypushback(length - prefix - 1);
+          return true;
+      }
+      yypushback(suffix);
+      return false;
+  }
+
   private boolean isEscapeSuffix() {
       int count = 0;
       int length = yylength();
@@ -297,8 +319,12 @@ unicode_value    = {unicode_char} /*| {little_u_value} | {big_u_value} | {escape
 
     [#]* "\""                   { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
     [#]* "\"\"\""               { pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
+    [#]+ "\"\"\"" [#]+          { if (isOneLineRawQuote()) { pushState(STRING_LITERAL); updateEscapePrefix(); return DOUBLE_QUOTE; }
+                                  pushState(STRING_MULTILINE); updateEscapePrefix(); return MULTILINE_STRING_START; }
     [#]* "'"                    { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
     [#]* "'''"                  { pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
+    [#]+ "'''" [#]+             { if (isOneLineRawQuote()) { pushState(BYTE_LITERAL); updateEscapePrefix(); return SINGLE_QUOTE; }
+                                  pushState(BYTES_MULTILINE); updateEscapePrefix(); return MULTILINE_BYTES_START; }
 
     "//" {unicode_char}* {newline}?   { return COMMENT; }
 }
