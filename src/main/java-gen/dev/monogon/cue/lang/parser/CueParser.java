@@ -1143,13 +1143,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<kw "let">> identifier "=" Expression
+  // <<kw "let">> <<identifier_ref>> "=" Expression
   public static boolean LetClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LetClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LET_CLAUSE, "<let clause>");
     r = kw(b, l + 1, "let");
-    r = r && identifier(b, l + 1);
+    r = r && identifier_ref(b, l + 1);
     r = r && consumeToken(b, EQ);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
