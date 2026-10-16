@@ -13,6 +13,7 @@
 
 ### Changed
 
+- Support for 2026.3
 - A `...` at the end of a line ends the declaration, as in CUE since v0.4.0, so a type on the next line is an error.
 - `->` is always one token, so `a: 10->5` without spaces reads as an arrow, not as `10 - >5`, and `a: 10 -> 5` with spaces, which CUE reads as `10 - >5` without the `functions` experiment, is now an error.
 
