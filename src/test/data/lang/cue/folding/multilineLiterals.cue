@@ -1,12 +1,12 @@
 s = "not folded"
 b = 'not folded'
 
-a = <fold text='"..."' expand='true'>"""
+a = <fold text='"..."'>"""
 content
 content
 """</fold>
 
-b = <fold text='"..."' expand='true'>#"""
+b = <fold text='"..."'>#"""
 content
 content
 """#</fold>

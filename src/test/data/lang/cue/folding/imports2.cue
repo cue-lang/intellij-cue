@@ -1,4 +1,4 @@
-import <fold text='(...)' expand='true'>(
+import <fold text='(...)'>(
 	"a"
 	"b"
 	"c"
