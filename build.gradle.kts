@@ -33,7 +33,11 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        val javaVersion = when {
+            platformVersion >= 262 -> 25
+            else -> 21
+        }
+        languageVersion = JavaLanguageVersion.of(javaVersion)
     }
 }
 
@@ -58,15 +62,18 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
         testFramework(TestFrameworkType.Bundled)
 
+        // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
+        bundledPlugin("com.intellij.modules.json")
+
         // 2025.3 extracted the IntelliLang plugin into a module
         when {
             platformVersion >= 253 -> bundledModule("intellij.platform.langInjection")
             else -> bundledPlugin("org.intellij.intelliLang")
         }
 
-        // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
-        if (platformVersion >= 243) {
-            bundledPlugin("com.intellij.modules.json")
+        // 2026.2 extracted the structure view into a module
+        if (platformVersion >= 262) {
+            bundledModule("intellij.platform.structureView")
         }
     }
 
@@ -76,6 +83,8 @@ dependencies {
 }
 
 intellijPlatform {
+    sandboxContainer.set(rootProject.layout.projectDirectory.dir(".intellijPlatform/sandbox"))
+
     pluginConfiguration {
         version = pluginVersion
 
@@ -104,8 +113,8 @@ intellijPlatform {
 
             // latest supported major version
             select {
-                sinceBuild = "261"
-                untilBuild = "261.*"
+                sinceBuild = "262"
+                untilBuild = "262.*"
                 types.set(listOf(IntelliJPlatformType.IntellijIdea))
             }
         }
