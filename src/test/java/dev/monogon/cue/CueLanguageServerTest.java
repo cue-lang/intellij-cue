@@ -8,9 +8,7 @@ import dev.monogon.cue.lsp.CueServerSupportProvider;
 import dev.monogon.cue.settings.CueLocalSettingsService;
 import dev.monogon.cue.settings.CueLspSupport;
 import org.jetbrains.annotations.Nullable;
-import org.junit.After;
-import org.junit.Assume;
-import org.junit.Before;
+import org.junit.*;
 
 /**
  * This is an abstract base class for tests relying on CUE LSP.
@@ -26,6 +24,8 @@ public abstract class CueLanguageServerTest extends CueLightTest {
 
     @Before
     public void lspSetupRequirements() {
+        CueServerSupportProvider.isEnabledInUnitTests.set(true);
+
         Assume.assumeTrue("LSP is not supported by the IDE setup", CueLspSupport.isLspSupportAvailable());
         Assume.assumeTrue("CUE LSP is turned off in the settings", CueLocalSettingsService.getSettings().isLspEnabled());
         Assume.assumeTrue("The cue binary is unavailable", CueCommandService.getInstance().isCueAvailable());
@@ -35,6 +35,8 @@ public abstract class CueLanguageServerTest extends CueLightTest {
 
     @After
     public void terminateCueLanguageServer() {
+        CueServerSupportProvider.isEnabledInUnitTests.set(false);
+
         LspServerManager.getInstance(getProject()).stopServers(CueServerSupportProvider.class);
     }
 
