@@ -1,4 +1,4 @@
-<fold text='import ...' expand='false'>import "a"
+<fold text='import ...'>import "a"
 import "b"
 import "c"
 import "d"</fold>

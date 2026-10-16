@@ -3,25 +3,22 @@ import org.jetbrains.changelog.markdownToHTML
 import org.jetbrains.intellij.platform.gradle.IntelliJPlatformType
 import org.jetbrains.intellij.platform.gradle.TestFrameworkType
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.konan.properties.loadProperties
 
 plugins {
     idea
     id("java")
     kotlin("jvm")
-    id("org.jetbrains.intellij.platform") version "2.13.1" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
+
+    id("org.jetbrains.intellij.platform") version "2.19.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
+    id("org.jetbrains.intellij.platform.grammarkit") version "2.19.0"
     id("org.jetbrains.changelog") version "2.4.0" // https://github.com/JetBrains/gradle-changelog-plugin
-    id("org.jetbrains.grammarkit") version "2023.3.0.3" // https://plugins.gradle.org/plugin/org.jetbrains.grammarkit
 }
 
 val platformVersion: Int = project.property("platformVersion")!!.toString().toInt() // load additional platform properties
-loadProperties(rootDir.resolve("gradle-${platformVersion}.properties").toString()).forEach {
-    rootProject.extra.set(it.key.toString(), it.value)
-}
 
-val pluginVersion: String by project
-val ideVersion: String by project
-val pluginSinceBuild: String by project
+val pluginVersion: String = project.findProperty("pluginVersion").toString()
+val ideVersion: String = project.property("ideVersion").toString()
+val pluginSinceBuild: String = project.property("pluginSinceBuild").toString()
 
 group = "dev.monogon.cuelang"
 version = pluginVersion
@@ -36,7 +33,11 @@ repositories {
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        val javaVersion = when {
+            platformVersion >= 262 -> 25
+            else -> 21
+        }
+        languageVersion = JavaLanguageVersion.of(javaVersion)
     }
 }
 
@@ -61,15 +62,18 @@ dependencies {
         testFramework(TestFrameworkType.Platform)
         testFramework(TestFrameworkType.Bundled)
 
+        // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
+        bundledPlugin("com.intellij.modules.json")
+
         // 2025.3 extracted the IntelliLang plugin into a module
         when {
             platformVersion >= 253 -> bundledModule("intellij.platform.langInjection")
             else -> bundledPlugin("org.intellij.intelliLang")
         }
 
-        // 2024.3 extracted the built-in JSON support into a plugin, we need it for our tests
-        if (platformVersion >= 243) {
-            bundledPlugin("com.intellij.modules.json")
+        // 2026.2 extracted the structure view into a module
+        if (platformVersion >= 262) {
+            bundledModule("intellij.platform.structureView")
         }
     }
 
@@ -79,6 +83,8 @@ dependencies {
 }
 
 intellijPlatform {
+    sandboxContainer.set(rootProject.layout.projectDirectory.dir(".intellijPlatform/sandbox"))
+
     pluginConfiguration {
         version = pluginVersion
 
@@ -107,8 +113,8 @@ intellijPlatform {
 
             // latest supported major version
             select {
-                sinceBuild = "261"
-                untilBuild = "261.*"
+                sinceBuild = "262"
+                untilBuild = "262.*"
                 types.set(listOf(IntelliJPlatformType.IntellijIdea))
             }
         }
@@ -141,7 +147,7 @@ idea {
 tasks {
     generateLexer {
         sourceFile = project.file("src/grammar/cue.flex")
-        targetOutputDir = project.file("src/main/java-gen/dev/monogon/cue/lang/lexer")
-        purgeOldFiles = true
+        targetRootOutputDir = project.file("src/main/java-gen")
+        purgeOldFiles = false
     }
 }

@@ -12,7 +12,7 @@ public class CueFoldingBuilderTest extends CueParameterizedLightTest implements 
     @Test
     public void folding() {
         var file = Paths.get(getTestDataPath()).resolve(testFileName).toString();
-        myFixture.testFoldingWithCollapseStatus(file);
+        myFixture.testFolding(file);
     }
 
     @Override
