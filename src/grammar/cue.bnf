@@ -81,6 +81,9 @@ Please not the following important differences:
         AT="@"
         LEFT_PAREN="("
         RIGHT_PAREN=")"
+        TILDE="~"
+        ARROW="->"
+        HASH="#"
 
         ATTRIBUTE_VALUE="ATTRIBUTE_VALUE"
     ]
@@ -134,7 +137,6 @@ private string_lit ::= simple_string_lit
                    | multiline_string_lit
                    | simple_bytes_lit
                    | multiline_bytes_lit
-                   | "#" string_lit "#"
 //private string_lit_recover ::= !(DOUBLE_QUOTE | DOUBLE_QUOTE_END | SINGLE_QUOTE | SINGLE_QUOTE_END | MULTILINE_STRING_START | MULTILINE_STRING_END | MULTILINE_BYTES_START | MULTILINE_BYTES_END)
 
 // IntelliJ: extension to handle our known identifier tokens, identifier_PREDECLARED is mostly for highlighting 
@@ -195,7 +197,7 @@ ElementList   ::= Embedding { comma Embedding }*
 // https://cuelang.org/docs/references/spec/#expressions
 Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
 Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
-BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal methods=[Literal=""]}
+BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal}
 OperandName ::= <<identifier_ref>> | QualifiedIdent {extends=Operand}
 
 QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}

@@ -55,6 +55,7 @@ public interface CueTypes {
   IElementType UNIFICATION_BINARY_EXPR = new CueCompositeElementType("UNIFICATION_BINARY_EXPR");
 
   IElementType ADD_OP = new CueTokenType("ADD_OP");
+  IElementType ARROW = new CueTokenType("->");
   IElementType AT = new CueTokenType("@");
   IElementType ATTRIBUTE_VALUE = new CueTokenType("ATTRIBUTE_VALUE");
   IElementType BOOL_LIT = new CueTokenType("BOOL_LIT");
@@ -70,6 +71,7 @@ public interface CueTypes {
   IElementType ESCAPED_CHAR = new CueTokenType("ESCAPED_CHAR");
   IElementType EXCL = new CueTokenType("!");
   IElementType FLOAT_LIT = new CueTokenType("FLOAT_LIT");
+  IElementType HASH = new CueTokenType("#");
   IElementType IDENTIFIER = new CueTokenType("IDENTIFIER");
   IElementType IDENTIFIER_PREDECLARED = new CueTokenType("IDENTIFIER_PREDECLARED");
   IElementType INTERPOLATION_END = new CueTokenType("INTERPOLATION_END");
@@ -98,6 +100,7 @@ public interface CueTypes {
   IElementType RIGHT_PAREN = new CueTokenType(")");
   IElementType SINGLE_QUOTE = new CueTokenType("SINGLE_QUOTE");
   IElementType SINGLE_QUOTE_END = new CueTokenType("'");
+  IElementType TILDE = new CueTokenType("~");
   IElementType UNICODE_VALUE = new CueTokenType("UNICODE_VALUE");
 
   class Factory {

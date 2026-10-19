@@ -3,7 +3,7 @@ FILE
   PsiElement(IDENTIFIER)('a')
   PsiElement(?)('?')
   PsiErrorElement:':' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(IDENTIFIER)('X')
   PsiElement(:)(':')
   PsiWhiteSpace(' ')
