@@ -4,7 +4,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.navigation.ItemPresentation;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.tree.IElementType;
-import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.tree.TokenSet;
 import com.intellij.psi.util.PsiUtilCore;
 import dev.monogon.cue.lang.CueTypes;
 import dev.monogon.cue.lang.psi.*;
@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import javax.swing.*;
 
 public class CuePsiImplUtil {
+    private static final TokenSet CONSTRAINT_MARKERS = TokenSet.create(CueTypes.QMARK, CueTypes.EXCL);
+
     private CuePsiImplUtil() {
     }
 
@@ -52,26 +54,22 @@ public class CuePsiImplUtil {
     }
 
     /**
-     * @return If the label name is followed by a "?" token.
+     * @return If the label is marked with a "?" token.
      */
     public static boolean isOptionalFieldConstraint(@NotNull CueLabelExpr label) {
         return getConstraintElementType(label) == CueTypes.QMARK;
     }
 
     /**
-     * @return If the label name is followed by a "!" token.
+     * @return If the label is marked with a "!" token.
      */
     public static boolean isRequiredFieldConstraint(@NotNull CueLabelExpr label) {
         return getConstraintElementType(label) == CueTypes.EXCL;
     }
 
     private static @Nullable IElementType getConstraintElementType(@NotNull CueLabelExpr label) {
-        var name = label.getLabelName();
-        if (name == null) {
-            return null;
-        }
-        var next = PsiTreeUtil.nextCodeLeaf(name);
-        return next != null ? PsiUtilCore.getElementType(next) : null;
+        var marker = label.getNode().findChildByType(CONSTRAINT_MARKERS);
+        return marker != null ? marker.getElementType() : null;
     }
 
     public static @Nullable ItemPresentation getPresentation(@NotNull CueField field) {

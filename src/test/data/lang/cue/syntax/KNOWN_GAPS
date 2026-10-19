@@ -1,16 +1,5 @@
 # Corpus files that must be valid but that the parser does not yet handle.
 # CueSyntaxCorpusTest fails if a listed file parses without errors.
-alias_keyword_names.cue
-alias_postfix_blank.cue
-alias_postfix_dual.cue
-alias_postfix_dynamic.cue
-alias_postfix_interp.cue
-alias_postfix_multilabel.cue
-alias_postfix_optional.cue
-alias_postfix_paren.cue
-alias_postfix_pattern.cue
-alias_postfix_simple.cue
-alias_postfix_space.cue
 call_chained.cue
 call_labeled.cue
 call_on_type.cue
@@ -19,7 +8,6 @@ closed_list.cue
 closed_struct.cue
 comprehension_body_next_line.cue
 fallback_then_field.cue
-file_attr_after_package.cue
 for_fallback.cue
 for_otherwise.cue
 func_body_no_return.cue
@@ -34,18 +22,13 @@ func_param_markers.cue
 func_type_only.cue
 func_validator.cue
 if_else.cue
-index_trailing_comma.cue
-interp_newline.cue
 keyword_for_var.cue
-keywords_as_labels.cue
 let_keyword_name.cue
 list_comprehension_else.cue
 literal_selectors.cue
 number_prefix_underscore.cue
-postfix_ellipsis.cue
 postfix_ellipsis_int.cue
 postfix_ellipsis_signed.cue
-postfix_ellipsis_space.cue
 raw_string_quote.cue
 try_assign.cue
 try_assign_blank.cue
@@ -58,4 +41,3 @@ try_in_list.cue
 try_later_clause_next_line.cue
 try_optional_paren.cue
 try_optional_selector_index.cue
-unary_eq.cue
