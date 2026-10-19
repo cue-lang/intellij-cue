@@ -7,6 +7,9 @@ import com.intellij.psi.tree.TokenSet;
 import dev.monogon.cue.lang.CueTokenTypes;
 import dev.monogon.cue.lang.CueTypes;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.function.BooleanSupplier;
 
 @SuppressWarnings("DuplicatedCode")
 public class CueParserUtil extends GeneratedParserUtilBase {
@@ -122,6 +125,64 @@ public class CueParserUtil extends GeneratedParserUtilBase {
             return true;
         }
         return false;
+    }
+
+    /**
+     * Reads a field label, as {@link #struct_label} does, and reports an error on
+     * one that starts with "__", which CUE reserves.
+     */
+    public static boolean label_decl(PsiBuilder b, int level) {
+        return checkReserved(b, () -> struct_label(b, level));
+    }
+
+    /**
+     * Reads a declared name, as {@link #identifier_ref} does, and reports an error
+     * on one that starts with "__", which CUE reserves.
+     */
+    public static boolean identifier_ref_decl(PsiBuilder b, int level) {
+        return checkReserved(b, () -> identifier_ref(b, level));
+    }
+
+    /**
+     * Reads a declared name that must be an identifier, and reports an error on
+     * one that starts with "__", which CUE reserves. The lexer reads such a name
+     * as a keyword, which is kept, so that nothing is remapped if the enclosing
+     * rule is discarded.
+     */
+    public static boolean identifier_decl(PsiBuilder b, @SuppressWarnings("unused") int level) {
+        return checkReserved(b, () -> {
+            var type = b.getTokenType();
+            if (CueTokenTypes.IDENTIFIERS.contains(type) || type == CueTypes.KEYWORD && isReserved(b.getTokenText())) {
+                b.advanceLexer();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    /**
+     * Reads a name with the given reader and, if it starts with "__", reports an
+     * error on it, as CUE's parser does for a declared name. The name stays read.
+     */
+    private static boolean checkReserved(PsiBuilder b, BooleanSupplier reader) {
+        var text = b.getTokenText();
+        var marker = b.mark();
+        if (!reader.getAsBoolean()) {
+            marker.drop();
+            return false;
+        }
+        if (isReserved(text)) {
+            marker.error("identifiers starting with '__' are reserved");
+        }
+        else {
+            marker.drop();
+        }
+        return true;
+    }
+
+    /** Reports whether the given name is one that CUE reserves, starting with "__". */
+    private static boolean isReserved(@Nullable String name) {
+        return name != null && name.startsWith("__");
     }
 
     /**
