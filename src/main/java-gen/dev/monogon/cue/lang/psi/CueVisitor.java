@@ -59,6 +59,10 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFallbackClause(@NotNull CueFallbackClause o) {
+    visitCompositeElement(o);
+  }
+
   public void visitField(@NotNull CueField o) {
     visitDeclaration(o);
   }
@@ -154,6 +158,10 @@ public class CueVisitor extends PsiElementVisitor {
   public void visitStructLit(@NotNull CueStructLit o) {
     visitLiteral(o);
     // visitBlock(o);
+  }
+
+  public void visitTryClause(@NotNull CueTryClause o) {
+    visitCompositeElement(o);
   }
 
   public void visitUnaryExpr(@NotNull CueUnaryExpr o) {

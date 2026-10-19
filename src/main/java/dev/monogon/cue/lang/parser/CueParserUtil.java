@@ -124,6 +124,20 @@ public class CueParserUtil extends GeneratedParserUtilBase {
         return false;
     }
 
+    /**
+     * Reads an ellipsis of a closed list with the given parser, and reports an
+     * error on it, as CUE's parser does. The ellipsis stays read.
+     */
+    public static boolean closed_list_ellipsis(PsiBuilder b, int level, Parser ellipsis) {
+        var marker = b.mark();
+        if (!ellipsis.parse(b, level)) {
+            marker.drop();
+            return false;
+        }
+        marker.error("closed list literal cannot end in an ellipsis");
+        return true;
+    }
+
     public static boolean read_comma(PsiBuilder b, @SuppressWarnings("unused") int level) {
         var type = b.getTokenType();
         if (type == CueTypes.COMMA || type == CueTokenTypes.COMMA_IMPLICIT) {
