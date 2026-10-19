@@ -98,7 +98,7 @@ ImportDecl       ::= "import" ( ImportSpec | "(" { ImportSpec comma }* ")" ) {
     pin=1
     methods=[leftParen="LEFT_PAREN" rightParen="RIGHT_PAREN"]
 }
-ImportSpec       ::= [ PackageName ] ImportPath
+ImportSpec       ::= [ <<identifier_decl>> ] ImportPath
 ImportLocation   ::= { unicode_value }*
 ImportPath       ::= "\"" ImportLocation [ ":" identifier ] "\""
 
@@ -155,13 +155,13 @@ Declaration     ::= Field | Ellipsis | LetClause | Embedding | attribute // Inte
 Ellipsis        ::= "..." [ Expression ] // use by both Declaration and ListLit
 Embedding       ::= Comprehension | AliasExpr {extends=Declaration}
 Field           ::= Label ":" { Label ":" }* AliasExpr attribute* {extends=Declaration methods=[getPresentation]}
-Label           ::= [ identifier "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
+Label           ::= [ <<identifier_decl>> "=" ] LabelExpr // fixme remap identifier here, i.e. accept keywords as identifier?
 // IntelliJ: the postfix alias comes before "?" or "!", as CUE's parser requires
 LabelExpr       ::= LabelName [ PostfixAlias ] ["?" | "!"]
                   | "[" AliasExpr "]" [ PostfixAlias ] {
     methods=[isOptionalFieldConstraint isRequiredFieldConstraint]
 }
-LabelName       ::= <<struct_label>>
+LabelName       ::= <<label_decl>>
                   | simple_string_lit
                   | "(" AliasExpr ")" {
     methods=[isOptionalFieldName isRequiredFieldName isDynamicFieldName]
@@ -189,7 +189,7 @@ attr_tokens     ::= { <<attr_token>> // fixme remap token type of for attr_token
 // https://cuelang.org/docs/references/spec/#attributes
 // fixme remap identifier here, i.e. accept keywords as identifier?
 // IntelliJ: changed order, because the identifier prefix is also an Expression
-AliasExpr  ::= [ <<identifier_ref>> "=" ] Expression { extends=Expression }
+AliasExpr  ::= [ <<identifier_ref_decl>> "=" ] Expression { extends=Expression }
 
 // fixme added closing ] at the end, bug in grammar
 ListLit       ::= ClosedList | OpenList {
@@ -268,7 +268,7 @@ Clauses             ::= !(<<kw "try">> comma) StartClause { [ comma ] Clause }*
 StartClause         ::= ForClause | GuardClause | TryClause
 Clause              ::= StartClause | LetClause
 // keywords may name the variables, as in for import in x
-ForClause           ::= <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref>> ] "in" Expression {
+ForClause           ::= <<kw "for">> <<identifier_ref_decl>> [ comma <<identifier_ref_decl>> ] "in" Expression {
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]
 }
@@ -276,7 +276,7 @@ GuardClause         ::= <<kw "if">> Expression
 TryClause           ::= <<kw "try">> [ <<identifier_ref>> "=" Expression ]
 FallbackClause      ::= ( <<kw "else">> | <<kw "otherwise">> | <<kw "fallback">> ) ( StructLit | <<expected "'{'">> ) { pin=1 }
 // keywords may name the variable, as in let import = 1
-LetClause           ::= <<kw "let">> <<identifier_ref>> "=" Expression {
+LetClause           ::= <<kw "let">> <<identifier_ref_decl>> "=" Expression {
     mixin="dev.monogon.cue.lang.psi.impl.CueLetClauseMixin"
     implements=["dev.monogon.cue.lang.psi.CueBlock"]
     methods=["isValidBlock"]

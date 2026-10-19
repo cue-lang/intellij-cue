@@ -46,7 +46,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   };
 
   /* ********************************************************** */
-  // [ <<identifier_ref>> "=" ] Expression
+  // [ <<identifier_ref_decl>> "=" ] Expression
   public static boolean AliasExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr")) return false;
     boolean r;
@@ -57,19 +57,19 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ <<identifier_ref>> "=" ]
+  // [ <<identifier_ref_decl>> "=" ]
   private static boolean AliasExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr_0")) return false;
     AliasExpr_0_0(b, l + 1);
     return true;
   }
 
-  // <<identifier_ref>> "="
+  // <<identifier_ref_decl>> "="
   private static boolean AliasExpr_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AliasExpr_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = identifier_ref(b, l + 1);
+    r = identifier_ref_decl(b, l + 1);
     r = r && consumeToken(b, EQ);
     exit_section_(b, m, null, r);
     return r;
@@ -559,13 +559,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<kw "for">> <<identifier_ref>> [ comma <<identifier_ref>> ] "in" Expression
+  // <<kw "for">> <<identifier_ref_decl>> [ comma <<identifier_ref_decl>> ] "in" Expression
   public static boolean ForClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FOR_CLAUSE, "<for clause>");
     r = kw(b, l + 1, "for");
-    r = r && identifier_ref(b, l + 1);
+    r = r && identifier_ref_decl(b, l + 1);
     r = r && ForClause_2(b, l + 1);
     r = r && consumeToken(b, "in");
     r = r && Expression(b, l + 1, -1);
@@ -573,20 +573,20 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ comma <<identifier_ref>> ]
+  // [ comma <<identifier_ref_decl>> ]
   private static boolean ForClause_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_2")) return false;
     ForClause_2_0(b, l + 1);
     return true;
   }
 
-  // comma <<identifier_ref>>
+  // comma <<identifier_ref_decl>>
   private static boolean ForClause_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForClause_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = comma(b, l + 1);
-    r = r && identifier_ref(b, l + 1);
+    r = r && identifier_ref_decl(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -957,7 +957,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // [ PackageName ] ImportPath
+  // [ <<identifier_decl>> ] ImportPath
   public static boolean ImportSpec(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportSpec")) return false;
     boolean r;
@@ -968,10 +968,10 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ PackageName ]
+  // [ <<identifier_decl>> ]
   private static boolean ImportSpec_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportSpec_0")) return false;
-    PackageName(b, l + 1);
+    identifier_decl(b, l + 1);
     return true;
   }
 
@@ -1018,7 +1018,7 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // [ identifier "=" ] LabelExpr
+  // [ <<identifier_decl>> "=" ] LabelExpr
   public static boolean Label(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label")) return false;
     boolean r;
@@ -1029,19 +1029,19 @@ public class CueParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // [ identifier "=" ]
+  // [ <<identifier_decl>> "=" ]
   private static boolean Label_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0")) return false;
     Label_0_0(b, l + 1);
     return true;
   }
 
-  // identifier "="
+  // <<identifier_decl>> "="
   private static boolean Label_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Label_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = identifier(b, l + 1);
+    r = identifier_decl(b, l + 1);
     r = r && consumeToken(b, EQ);
     exit_section_(b, m, null, r);
     return r;
@@ -1116,14 +1116,14 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<struct_label>>
+  // <<label_decl>>
   //                   | simple_string_lit
   //                   | "(" AliasExpr ")"
   public static boolean LabelName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LabelName")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LABEL_NAME, "<label name>");
-    r = struct_label(b, l + 1);
+    r = label_decl(b, l + 1);
     if (!r) r = simple_string_lit(b, l + 1);
     if (!r) r = LabelName_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -1143,13 +1143,13 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // <<kw "let">> <<identifier_ref>> "=" Expression
+  // <<kw "let">> <<identifier_ref_decl>> "=" Expression
   public static boolean LetClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "LetClause")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, LET_CLAUSE, "<let clause>");
     r = kw(b, l + 1, "let");
-    r = r && identifier_ref(b, l + 1);
+    r = r && identifier_ref_decl(b, l + 1);
     r = r && consumeToken(b, EQ);
     r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);

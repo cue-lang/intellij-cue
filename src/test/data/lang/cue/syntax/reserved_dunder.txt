@@ -4,7 +4,8 @@ FILE
     CueLabelImpl(LABEL)
       CueLabelExprImpl(LABEL_EXPR)
         CueLabelNameImpl(LABEL_NAME)
-          PsiElement(IDENTIFIER)('__x')
+          PsiErrorElement:identifiers starting with '__' are reserved
+            PsiElement(IDENTIFIER)('__x')
     PsiElement(:)(':')
     PsiWhiteSpace(' ')
     CueBasicLitImpl(BASIC_LIT)
