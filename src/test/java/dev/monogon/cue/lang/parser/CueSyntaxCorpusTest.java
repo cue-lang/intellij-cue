@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
  *
  * A file must be valid if a header line has the outcome ok: some language
  * version accepts it, perhaps only with the experiments the line names.
+ * A file that no language version accepts has to have a parse error.
  * A file that must be valid has to parse without errors,
  * unless KNOWN_GAPS lists it: KNOWN_GAPS names, one per line, the corpus files
  * that must be valid but that the parser does not yet handle, and its absence
@@ -70,10 +71,11 @@ public class CueSyntaxCorpusTest extends ParsingTestCase {
         var path = FileUtil.toSystemIndependentName(filePath);
         assertFalse(path + " has no header; refresh the copy with ./gradlew syncSyntaxCorpus", header(path).isEmpty());
         doTest(true, false);
+        var hasErrors = PsiTreeUtil.hasErrorElements(myFile);
         if (!mustBeValid(path)) {
+            assertTrue(path + " parses without errors, but no language version accepts it; fix the parser", hasErrors);
             return;
         }
-        var hasErrors = PsiTreeUtil.hasErrorElements(myFile);
         if (knownGaps().contains(path)) {
             if (!hasErrors && Boolean.getBoolean(OVERWRITE_PROPERTY)) {
                 removeKnownGap(path);
