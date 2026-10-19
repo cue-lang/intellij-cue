@@ -1,21 +1,6 @@
 # Corpus files that must be valid but that the parser does not yet handle.
 # CueSyntaxCorpusTest fails if a listed file parses without errors.
-call_chained.cue
-call_labeled.cue
-call_on_type.cue
-call_partial.cue
 comprehension_body_next_line.cue
-func_body_no_return.cue
-func_body_postfix.cue
-func_defaults.cue
-func_keyword_params.cue
-func_literal.cue
-func_multiline.cue
-func_open_signature.cue
-func_param_attrs.cue
-func_param_markers.cue
-func_type_only.cue
-func_validator.cue
 keyword_for_var.cue
 let_keyword_name.cue
 literal_selectors.cue

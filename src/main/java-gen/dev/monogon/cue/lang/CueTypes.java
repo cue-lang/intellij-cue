@@ -27,6 +27,9 @@ public interface CueTypes {
   IElementType FALLBACK_CLAUSE = new CueCompositeElementType("FALLBACK_CLAUSE");
   IElementType FIELD = new CueCompositeElementType("FIELD");
   IElementType FOR_CLAUSE = new CueCompositeElementType("FOR_CLAUSE");
+  IElementType FUNC = new CueCompositeElementType("FUNC");
+  IElementType FUNC_PARAM = new CueCompositeElementType("FUNC_PARAM");
+  IElementType FUNC_PARAMS = new CueCompositeElementType("FUNC_PARAMS");
   IElementType GUARD_CLAUSE = new CueCompositeElementType("GUARD_CLAUSE");
   IElementType IMPORT_DECL = new CueCompositeElementType("IMPORT_DECL");
   IElementType IMPORT_LOCATION = new CueCompositeElementType("IMPORT_LOCATION");
@@ -113,6 +116,9 @@ public interface CueTypes {
       if (type == ALIAS_EXPR) {
         return new CueAliasExprImpl(node);
       }
+      else if (type == ARGUMENT) {
+        return new CueArgumentImpl(node);
+      }
       else if (type == ARGUMENTS) {
         return new CueArgumentsImpl(node);
       }
@@ -157,6 +163,15 @@ public interface CueTypes {
       }
       else if (type == FOR_CLAUSE) {
         return new CueForClauseImpl(node);
+      }
+      else if (type == FUNC) {
+        return new CueFuncImpl(node);
+      }
+      else if (type == FUNC_PARAM) {
+        return new CueFuncParamImpl(node);
+      }
+      else if (type == FUNC_PARAMS) {
+        return new CueFuncParamsImpl(node);
       }
       else if (type == GUARD_CLAUSE) {
         return new CueGuardClauseImpl(node);

@@ -71,6 +71,18 @@ public class CueVisitor extends PsiElementVisitor {
     visitBlock(o);
   }
 
+  public void visitFunc(@NotNull CueFunc o) {
+    visitOperand(o);
+  }
+
+  public void visitFuncParam(@NotNull CueFuncParam o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFuncParams(@NotNull CueFuncParams o) {
+    visitCompositeElement(o);
+  }
+
   public void visitGuardClause(@NotNull CueGuardClause o) {
     visitCompositeElement(o);
   }
