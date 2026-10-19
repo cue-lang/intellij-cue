@@ -202,7 +202,7 @@ private OpenList   ::= "[" [(ElementList [comma Ellipsis]) | Ellipsis]  [comma] 
 ElementList   ::= Embedding { comma Embedding }*
 
 // https://cuelang.org/docs/references/spec/#expressions
-Operand     ::= Literal | OperandName | "(" Expression ")" {extends=PrimaryExpr}
+Operand     ::= Literal | Func | OperandName | "(" Expression ")" {extends=PrimaryExpr}
 Literal     ::= BasicLit | ListLit | StructLit {extends=Operand}
 BasicLit    ::= INT_LIT | FLOAT_LIT | string_lit | NULL_LIT | BOOL_LIT | BOTTOM_LIT {extends=Literal}
 OperandName ::= <<identifier_ref>> | QualifiedIdent {extends=Operand}
@@ -217,10 +217,18 @@ QualifiedIdent ::= PackageName "." <<identifier_ref>> {extends=Operand}
 PrimaryExpr ::= Operand {Selector | Index /*| Slice*/ | Arguments | Spread | "?"}* {extends=Expression}
 Selector       ::= "." (<<identifier_ref>> | simple_string_lit) {extends=PrimaryExpr}
 Index          ::= "[" Expression (":" Expression)? [ comma ] "]" {extends=PrimaryExpr pin=1} //fixme find out why example use ":" in Index
-Argument       ::= Expression {extends=PrimaryExpr}
-Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] ")" {extends=PrimaryExpr pin=1}
+// IntelliJ: an argument may be labeled, and a trailing "..." applies the function partially
+Argument       ::= [ <<identifier_ref>> ":" ] Expression {extends=PrimaryExpr}
+Arguments      ::= "(" [ ( Argument { comma Argument }* ) [ comma ] ] [ "..." [ comma ] ] ")" {extends=PrimaryExpr pin=1}
 Spread         ::= "..." {extends=PrimaryExpr}
 // fixme Slice is missing
+
+// IntelliJ: a function literal, as in func(a: int) -> int: a + 1, or type, as in func(int) -> int;
+// func without a parameter list is a reference
+Func           ::= <<kw "func">> FuncParams [ "->" Expression [ ":" Expression ] | ":" Expression ] {extends=Operand}
+// a trailing "..." makes the signature open
+FuncParams     ::= "(" [ ( FuncParam | "..." ) { comma ( FuncParam | "..." ) }* [ comma ] ] ")" {pin=1}
+FuncParam      ::= [ <<identifier_ref>> [ PostfixAlias ] [ "?" | "!" ] ":" ] Expression [ "=" Expression ] attribute*
 
 // https://cuelang.org/docs/references/spec/#operators
 Expression ::= UnaryExpr | BinaryExpr | UnificationBinaryExpr // fixme extra root?
