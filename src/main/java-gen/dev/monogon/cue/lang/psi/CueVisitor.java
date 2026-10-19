@@ -127,6 +127,10 @@ public class CueVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitPostfixAlias(@NotNull CuePostfixAlias o) {
+    visitCompositeElement(o);
+  }
+
   public void visitPrimaryExpr(@NotNull CuePrimaryExpr o) {
     visitExpression(o);
   }
@@ -136,6 +140,10 @@ public class CueVisitor extends PsiElementVisitor {
   }
 
   public void visitSelector(@NotNull CueSelector o) {
+    visitPrimaryExpr(o);
+  }
+
+  public void visitSpread(@NotNull CueSpread o) {
     visitPrimaryExpr(o);
   }
 
