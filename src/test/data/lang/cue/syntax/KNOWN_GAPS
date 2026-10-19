@@ -13,6 +13,7 @@ alias_postfix_simple.cue
 alias_postfix_space.cue
 call_chained.cue
 call_labeled.cue
+call_on_type.cue
 call_partial.cue
 closed_list.cue
 closed_struct.cue
@@ -30,6 +31,7 @@ func_multiline.cue
 func_open_signature.cue
 func_param_attrs.cue
 func_param_markers.cue
+func_type_only.cue
 func_validator.cue
 if_else.cue
 index_trailing_comma.cue
@@ -39,14 +41,12 @@ keywords_as_labels.cue
 let_keyword_name.cue
 list_comprehension_else.cue
 literal_selectors.cue
-newline_before_colon.cue
 number_prefix_underscore.cue
 postfix_ellipsis.cue
 postfix_ellipsis_int.cue
 postfix_ellipsis_signed.cue
 postfix_ellipsis_space.cue
 raw_string_quote.cue
-struct_ellipsis_midline.cue
 try_assign.cue
 try_assign_blank.cue
 try_assign_keyword.cue

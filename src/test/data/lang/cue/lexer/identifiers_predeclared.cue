@@ -3,6 +3,11 @@ len
 close
 and
 or
+matchN
+matchIf
+error
+validator
+self
 // types
 null    // null is also a null_lit
 bool

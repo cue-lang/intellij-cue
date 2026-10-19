@@ -30,6 +30,7 @@ FILE
   PsiErrorElement:':' or '=' expected, got '...'
     PsiElement(...)('...')
   PsiElement(DUMMY_BLOCK)
+    PsiElement(,)('')
     PsiWhiteSpace('\n')
     PsiElement(IDENTIFIER)('c')
     PsiElement(:)(':')

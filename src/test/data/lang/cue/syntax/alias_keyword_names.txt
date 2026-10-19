@@ -3,7 +3,7 @@ FILE
   PsiComment(LINE_COMMENT)('// versions: v0.18.0..; outcome: ok\n')
   PsiElement(IDENTIFIER)('a')
   PsiErrorElement:':' or '=' expected, got '~'
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
   PsiElement(DUMMY_BLOCK)
     PsiElement(KEYWORD)('import')
     PsiElement(:)(':')
@@ -12,7 +12,7 @@ FILE
     PsiElement(,)('')
     PsiWhiteSpace('\n')
     PsiElement(IDENTIFIER)('c')
-    PsiElement(BAD_CHARACTER)('~')
+    PsiElement(~)('~')
     PsiElement(()('(')
     PsiElement(KEYWORD)('package')
     PsiElement(,)(',')
