@@ -233,42 +233,64 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // StartClause { [ comma ] Clause }*
+  // !(<<kw "try">> comma) StartClause { [ comma ] Clause }*
   public static boolean Clauses(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Clauses")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, CLAUSES, "<clauses>");
-    r = StartClause(b, l + 1);
-    r = r && Clauses_1(b, l + 1);
+    r = Clauses_0(b, l + 1);
+    r = r && StartClause(b, l + 1);
+    r = r && Clauses_2(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
+  // !(<<kw "try">> comma)
+  private static boolean Clauses_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Clauses_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NOT_);
+    r = !Clauses_0_0(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // <<kw "try">> comma
+  private static boolean Clauses_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Clauses_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = kw(b, l + 1, "try");
+    r = r && comma(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
   // { [ comma ] Clause }*
-  private static boolean Clauses_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Clauses_1")) return false;
+  private static boolean Clauses_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Clauses_2")) return false;
     while (true) {
       int c = current_position_(b);
-      if (!Clauses_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Clauses_1", c)) break;
+      if (!Clauses_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Clauses_2", c)) break;
     }
     return true;
   }
 
   // [ comma ] Clause
-  private static boolean Clauses_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Clauses_1_0")) return false;
+  private static boolean Clauses_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Clauses_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Clauses_1_0_0(b, l + 1);
+    r = Clauses_2_0_0(b, l + 1);
     r = r && Clause(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // [ comma ]
-  private static boolean Clauses_1_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Clauses_1_0_0")) return false;
+  private static boolean Clauses_2_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Clauses_2_0_0")) return false;
     comma(b, l + 1);
     return true;
   }
@@ -344,21 +366,29 @@ public class CueParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Clauses StructLit [ FallbackClause ]
+  // Clauses [ comma ] StructLit [ FallbackClause ]
   public static boolean Comprehension(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Comprehension")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, COMPREHENSION, "<comprehension>");
     r = Clauses(b, l + 1);
+    r = r && Comprehension_1(b, l + 1);
     r = r && StructLit(b, l + 1);
-    r = r && Comprehension_2(b, l + 1);
+    r = r && Comprehension_3(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
+  // [ comma ]
+  private static boolean Comprehension_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Comprehension_1")) return false;
+    comma(b, l + 1);
+    return true;
+  }
+
   // [ FallbackClause ]
-  private static boolean Comprehension_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Comprehension_2")) return false;
+  private static boolean Comprehension_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Comprehension_3")) return false;
     FallbackClause(b, l + 1);
     return true;
   }
