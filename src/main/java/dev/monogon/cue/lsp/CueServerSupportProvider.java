@@ -42,5 +42,5 @@ public class CueServerSupportProvider implements LspServerSupportProvider {
      * By default, the server is turned off to avoid interference with other tests.
      */
     @TestOnly
-    public static AtomicBoolean isEnabledInUnitTests = new AtomicBoolean(false);
+    public static final AtomicBoolean isEnabledInUnitTests = new AtomicBoolean(false);
 }
