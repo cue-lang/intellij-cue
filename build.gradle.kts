@@ -157,6 +157,10 @@ tasks {
         targetRootOutputDir = project.file("src/main/java-gen")
         purgeOldFiles = false
     }
+    // The compilers read the lexer from src/main/java-gen. If a build runs
+    // generateLexer, they must compile what it generates.
+    compileJava { mustRunAfter(generateLexer) }
+    compileKotlin { mustRunAfter(generateLexer) }
     generateParser {
         sourceFile = project.file("src/grammar/cue.bnf")
         targetRootOutputDir = project.file("src/main/java-gen")
