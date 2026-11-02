@@ -28,7 +28,11 @@ jobs:
               uses: actions/setup-java@v5
               with:
                   distribution: jetbrains
-                  java-version: 25
+                  # Gradle runs on the last version: Kotlin 2.0.21, used for 2024.3, fails on Java 25.
+                  # Builds for 2026.2+ use version 25 as their toolchain.
+                  java-version: |
+                      25
+                      21
 
             # Setup Gradle
             - name: Setup Gradle
