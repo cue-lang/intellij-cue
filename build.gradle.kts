@@ -10,7 +10,7 @@ plugins {
     kotlin("jvm")
 
     id("org.jetbrains.intellij.platform") version "2.19.0" // https://github.com/JetBrains/intellij-platform-gradle-plugin/
-    id("org.jetbrains.intellij.platform.grammarkit") version "2.19.0"
+    id("org.jetbrains.intellij.platform.grammarkit") version "2.20.0"
     id("org.jetbrains.changelog") version "2.4.0" // https://github.com/JetBrains/gradle-changelog-plugin
 }
 
